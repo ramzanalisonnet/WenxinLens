@@ -1,0 +1,74 @@
+# ─── Core Framework ───────────────────────────────────────────
+fastapi==0.109.2
+uvicorn[standard]==0.27.1
+pydantic==2.6.1
+pydantic-settings==2.2.1
+python-multipart==0.0.9
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+httpx==0.26.0
+aiofiles==23.2.1
+
+# ─── AI / LLM ─────────────────────────────────────────────────
+langchain==0.1.9
+langchain-community==0.0.24
+langchain-openai==0.0.7
+langgraph==0.0.26
+openai==1.12.0
+dashscope==1.17.1
+transformers==4.38.1
+accelerate==0.27.2
+tokenizers==0.15.2
+sentence-transformers==2.4.0
+einops==0.7.0
+
+# ─── Computer Vision ──────────────────────────────────────────
+torch==2.2.0
+torchvision==0.17.0
+ultralytics==8.1.20
+open-clip-torch==2.24.0
+Pillow==10.2.0
+opencv-python-headless==4.9.0.80
+numpy==1.26.4
+
+# ─── Vector Database ──────────────────────────────────────────
+pymilvus==2.3.6
+faiss-cpu==1.7.4
+
+# ─── Graph Database ───────────────────────────────────────────
+neo4j==5.17.0
+
+# ─── Cache / Sessions ─────────────────────────────────────────
+redis[hiredis]==5.0.1
+
+# ─── Document Processing ──────────────────────────────────────
+pypdf==4.0.2
+python-docx==1.1.0
+beautifulsoup4==4.12.3
+lxml==5.1.0
+tiktoken==0.6.0
+langchain-text-splitters==0.0.1
+
+# ─── Voice / TTS ──────────────────────────────────────────────
+azure-cognitiveservices-speech==1.35.0
+elevenlabs==0.3.0b0
+TTS==0.22.0
+
+# ─── Utilities ────────────────────────────────────────────────
+python-dotenv==1.0.1
+loguru==0.7.2
+tenacity==8.2.3
+anyio==4.3.0
+slowapi==0.1.9
+sentry-sdk[fastapi]==1.40.6
+
+# ─── Data ─────────────────────────────────────────────────────
+pandas==2.2.0
+datasets==2.17.1
+requests==2.31.0
+tqdm==4.66.2
+
+# ─── Testing ──────────────────────────────────────────────────
+pytest==8.0.2
+pytest-asyncio==0.23.5
+httpx==0.26.0

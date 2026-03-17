@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Ming dynasty architecture illustration">
+  <rect width="1200" height="800" fill="#101A31"/>
+  <rect x="150" y="505" width="900" height="175" rx="10" fill="#E6EAF2" opacity="0.13"/>
+  <rect x="210" y="430" width="780" height="58" rx="8" fill="#FF4D4F"/>
+  <rect x="300" y="350" width="600" height="50" rx="8" fill="#00D1B2"/>
+  <rect x="560" y="265" width="80" height="80" rx="8" fill="#E6EAF2" opacity="0.74"/>
+  <circle cx="220" cy="170" r="88" fill="#FF4D4F" opacity="0.13"/>
+  <text x="60" y="760" font-family="Inter, sans-serif" font-size="42" fill="#E6EAF2">Ming Dynasty</text>
+</svg>

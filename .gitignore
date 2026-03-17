@@ -1,0 +1,82 @@
+# ─── Python ───────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+pip-wheel-metadata/
+share/python-wheels/
+*.manifest
+*.spec
+
+# ─── Models & Large Files ─────────────────────────────────────
+*.pt
+*.pth
+*.bin
+*.ckpt
+*.safetensors
+*.onnx
+models/weights/
+datasets/raw/
+
+# ─── Environment ──────────────────────────────────────────────
+.env
+.env.local
+.env.production
+.env.*.local
+*.key
+*.pem
+secrets/
+
+# ─── Node / Frontend ──────────────────────────────────────────
+node_modules/
+.next/
+out/
+.nuxt/
+dist/
+.cache/
+*.tsbuildinfo
+
+# ─── Logs ─────────────────────────────────────────────────────
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ─── IDE ──────────────────────────────────────────────────────
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ─── Docker ───────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ─── Testing ──────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+coverage.xml
+*.cover
+
+# ─── Jupyter ──────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ─── Misc ─────────────────────────────────────────────────────
+*.tmp
+*.bak
+temp/
+tmp/

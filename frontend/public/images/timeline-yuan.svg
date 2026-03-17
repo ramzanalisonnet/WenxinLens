@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Yuan dynasty architecture illustration">
+  <rect width="1200" height="800" fill="#0E1729"/>
+  <rect x="170" y="515" width="860" height="165" rx="10" fill="#E6EAF2" opacity="0.12"/>
+  <rect x="230" y="445" width="740" height="54" rx="8" fill="#FF4D4F"/>
+  <rect x="310" y="375" width="580" height="48" rx="8" fill="#00D1B2"/>
+  <rect x="560" y="290" width="80" height="80" rx="8" fill="#E6EAF2" opacity="0.72"/>
+  <circle cx="1010" cy="180" r="90" fill="#00D1B2" opacity="0.12"/>
+  <text x="60" y="760" font-family="Inter, sans-serif" font-size="42" fill="#E6EAF2">Yuan Dynasty</text>
+</svg>

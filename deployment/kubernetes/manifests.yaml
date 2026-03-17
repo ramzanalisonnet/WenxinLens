@@ -1,0 +1,155 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wenxinlens-backend
+  labels:
+    app: wenxinlens-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wenxinlens-backend
+  template:
+    metadata:
+      labels:
+        app: wenxinlens-backend
+    spec:
+      containers:
+        - name: backend
+          image: wenxinlens/backend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: wenxinlens-secrets
+          env:
+            - name: MILVUS_HOST
+              value: "milvus-service"
+            - name: NEO4J_URI
+              value: "bolt://neo4j-service:7687"
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: wenxinlens-secrets
+                  key: REDIS_URL
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "2"
+              memory: "4Gi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          volumeMounts:
+            - name: model-cache
+              mountPath: /root/.cache
+      volumes:
+        - name: model-cache
+          persistentVolumeClaim:
+            claimName: model-cache-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: wenxinlens-backend
+  ports:
+    - port: 8000
+      targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wenxinlens-frontend
+  labels:
+    app: wenxinlens-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wenxinlens-frontend
+  template:
+    metadata:
+      labels:
+        app: wenxinlens-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: wenxinlens/frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NEXT_PUBLIC_API_URL
+              value: "https://api.wenxinlens.example.com"
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: wenxinlens-frontend
+  ports:
+    - port: 3000
+      targetPort: 3000
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: model-cache-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wenxinlens-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+    - host: wenxinlens.example.com
+      http:
+        paths:
+          - path: /api/
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 8000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 3000

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Knowledge base illustration">
+  <rect width="1200" height="800" fill="#121B31"/>
+  <g fill="#1C2238" stroke="#E6EAF2" stroke-opacity="0.18">
+    <rect x="140" y="180" width="260" height="180" rx="12"/>
+    <rect x="470" y="120" width="260" height="180" rx="12"/>
+    <rect x="800" y="190" width="260" height="180" rx="12"/>
+    <rect x="300" y="450" width="260" height="180" rx="12"/>
+    <rect x="650" y="430" width="260" height="180" rx="12"/>
+  </g>
+  <g stroke="#00D1B2" stroke-width="4" opacity="0.8">
+    <line x1="400" y1="270" x2="470" y2="210"/>
+    <line x1="730" y1="210" x2="800" y2="280"/>
+    <line x1="400" y1="540" x2="560" y2="540"/>
+    <line x1="730" y1="520" x2="800" y2="370"/>
+  </g>
+  <circle cx="600" cy="380" r="95" fill="#FF4D4F" opacity="0.18"/>
+</svg>

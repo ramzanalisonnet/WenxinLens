@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Qing dynasty architecture illustration">
+  <rect width="1200" height="800" fill="#0F182B"/>
+  <rect x="165" y="515" width="870" height="165" rx="10" fill="#E6EAF2" opacity="0.13"/>
+  <rect x="230" y="445" width="740" height="55" rx="8" fill="#00D1B2"/>
+  <rect x="305" y="372" width="590" height="48" rx="8" fill="#FF4D4F"/>
+  <rect x="560" y="286" width="80" height="80" rx="8" fill="#E6EAF2" opacity="0.74"/>
+  <circle cx="980" cy="185" r="95" fill="#FF4D4F" opacity="0.13"/>
+  <text x="60" y="760" font-family="Inter, sans-serif" font-size="42" fill="#E6EAF2">Qing Dynasty</text>
+</svg>

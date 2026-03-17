@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="AI recognition illustration">
+  <rect width="1200" height="800" fill="#131C33"/>
+  <rect x="120" y="120" width="960" height="560" rx="16" fill="#0B0F1A" stroke="#E6EAF2" stroke-opacity="0.2"/>
+  <rect x="220" y="220" width="760" height="360" rx="12" fill="#1C2238"/>
+  <rect x="420" y="280" width="360" height="220" rx="10" fill="#0B0F1A" stroke="#00D1B2" stroke-width="3"/>
+  <circle cx="600" cy="390" r="70" fill="#FF4D4F" opacity="0.25"/>
+  <text x="470" y="400" font-family="Inter, sans-serif" font-size="32" fill="#E6EAF2">AI Scan</text>
+</svg>
