@@ -74,8 +74,12 @@ class ExplanationAgent:
         style = state.get("architecture_style", "")
         features = state.get("structural_features", [])
         context = state.get("formatted_context", "")
+        advanced_summary = state.get("advanced_feature_summary", "")
         language = state.get("language", "en")
         detail_level = state.get("detail_level", "standard")
+
+        if advanced_summary:
+            context = f"{context}\n\n[Advanced Feature Layer]\n{advanced_summary}" if context else advanced_summary
 
         template = EXPLANATION_TEMPLATES.get(detail_level, EXPLANATION_TEMPLATES["standard"])
         prompt_en = template.format(building=f"{building_name} ({dynasty}, {style})")

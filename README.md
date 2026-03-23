@@ -9,6 +9,14 @@
 
 WenxinLens is a production-grade, multi-agent AI platform that combines computer vision, large language models, retrieval-augmented generation (RAG), and a cultural knowledge graph to identify Chinese ancient architecture and deliver rich, multilingual cultural explanations.
 
+This version also includes an advanced research layer with five additional capabilities:
+
+- Time-Reconstruction AI
+- AI Historical Characters
+- Cultural DNA Analysis
+- Cross-Civilization Comparison
+- Cinematic Story Mode
+
 ---
 
 ## Architecture Overview
@@ -129,6 +137,44 @@ docker-compose exec backend python -m scripts.init_knowledge_base
 | Multilingual | NLLB-200 / LLM translation |
 | Session Memory | Redis |
 | Caching | Redis + in-process LRU |
+| Time Reconstruction | RAG + SDXL/ControlNet-ready pipeline |
+| Historical Characters | Persona-grounded LLM agents |
+| Cultural DNA | Rule + embedding-assisted scoring |
+| Cross-Civilization Engine | Embedding + comparative reasoning |
+| Cinematic Story Mode | LLM script + TTS-ready scene plan |
+
+---
+
+## Advanced Feature Layer
+
+The orchestrator now runs:
+
+Recognition -> Retrieval -> Advanced Feature Agents -> Explanation -> Interaction
+
+New backend agent modules:
+
+- backend/agents/time_reconstruction_agent
+- backend/agents/historical_character_agent
+- backend/agents/cultural_dna_agent
+- backend/agents/comparison_agent
+- backend/agents/cinematic_agent
+
+New service:
+
+- backend/services/advanced_feature_service.py
+
+New API endpoints:
+
+- POST /api/v1/advanced/all
+- POST /api/v1/advanced/historical-character
+
+New frontend research module:
+
+- Route: /lab
+- Page: frontend/src/app/lab/page.tsx
+- Components in: frontend/src/components/advanced/
+
+See docs/advanced_features.md for architecture details, request/response shapes, and deployment notes.
 
 ---
 

@@ -31,13 +31,26 @@ class Settings(BaseSettings):
     # ── Server ─────────────────────────────────────────────────
     backend_host: str = "0.0.0.0"
     backend_port: int = 8000
-    cors_origins: list[str] = ["http://localhost:3000"]
+    cors_origins: list[str] = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
 
     @field_validator("cors_origins", mode="before")
     @classmethod
     def parse_cors(cls, v: str | list[str]) -> list[str]:
         if isinstance(v, str):
-            return [origin.strip() for origin in v.split(",")]
+            raw = v.strip()
+            if raw.startswith("[") and raw.endswith("]"):
+                raw = raw[1:-1]
+            origins = []
+            for origin in raw.split(","):
+                cleaned = origin.strip().strip('"').strip("'")
+                if cleaned:
+                    origins.append(cleaned)
+            return origins
         return v
 
     # ── Redis ──────────────────────────────────────────────────
@@ -105,6 +118,14 @@ class Settings(BaseSettings):
     # ── Monitoring ────────────────────────────────────────────
     sentry_dsn: str = ""
     log_level: str = "INFO"
+
+    # ── Advanced Feature Layer ───────────────────────────────
+    advanced_feature_cache_ttl_seconds: int = 7200
+    advanced_feature_parallelism: int = 5
+    time_reconstruction_model: str = "stabilityai/stable-diffusion-xl-base-1.0"
+    time_reconstruction_controlnet: str = "lllyasviel/control_v11p_sd15_canny"
+    enable_gpu_diffusion: bool = False
+    cinematic_tts_provider: str = "coqui"
 
     @property
     def is_production(self) -> bool:

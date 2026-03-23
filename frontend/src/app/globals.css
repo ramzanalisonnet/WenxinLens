@@ -318,6 +318,15 @@ img {
   min-width: 0;
 }
 
+.wl-brand-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid rgba(230, 234, 242, 0.2);
+  background: rgba(255, 255, 255, 0.03);
+}
+
 .wl-brand-mark {
   width: 36px;
   height: 36px;
@@ -450,6 +459,89 @@ img {
   font-size: 13px;
 }
 
+.wl-social-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.wl-footer-panel {
+  overflow: hidden;
+}
+
+.wl-footer-grid {
+  align-items: start;
+}
+
+.wl-footer-col {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.wl-footer-col-brand {
+  gap: 10px;
+}
+
+.wl-footer-brand-copy {
+  max-width: 420px;
+}
+
+.wl-footer-heading {
+  margin: 0;
+  color: #E6EAF2;
+  font-size: 14px;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.wl-footer-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.wl-footer-link {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.35;
+  transition: color 0.2s ease;
+}
+
+.wl-footer-link:hover {
+  color: var(--text);
+}
+
+.wl-social-grid {
+  margin-top: 2px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 108px;
+}
+
+.wl-social-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  border: 1px solid rgba(230, 234, 242, 0.2);
+  background: rgba(255, 255, 255, 0.04);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.wl-social-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(230, 234, 242, 0.34);
+  transform: translateY(-1px);
+}
+
 :focus-visible {
   outline: 2px solid var(--highlight);
   outline-offset: 2px;
@@ -497,6 +589,15 @@ img {
   .wl-brand-en {
     font-size: 18px;
   }
+
+  .wl-social-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .wl-social-grid {
+    max-width: 98px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -538,6 +639,10 @@ img {
 
   .section-block {
     padding: 48px 0;
+  }
+
+  .wl-footer-col-brand {
+    margin-bottom: 4px;
   }
 }
 

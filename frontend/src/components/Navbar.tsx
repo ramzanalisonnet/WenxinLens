@@ -11,6 +11,7 @@ type Lang = 'en' | 'zh'
 const navItems = [
   { href: '/#features', en: 'Features', zh: '功能' },
   { href: '/#architecture', en: 'Architecture', zh: '建筑' },
+  { href: '/lab', en: 'Advanced Lab', zh: '研究实验室' },
   { href: '/knowledge', en: 'Knowledge', zh: '知识' },
   { href: '/#about', en: 'About', zh: '关于' },
 ] as const
@@ -19,6 +20,7 @@ export function Navbar() {
   const pathname = usePathname()
   const [lang, setLang] = useState<Lang>('en')
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [logoFailed, setLogoFailed] = useState(false)
 
   useEffect(() => {
     const stored = window.localStorage.getItem('wenxinlens-lang')
@@ -41,9 +43,18 @@ export function Navbar() {
       <div className="container-1200">
         <nav className="wl-nav" aria-label="Primary">
           <Link href="/" className="wl-brand">
-            <div className="wl-brand-mark">
-              <span className="font-zh wl-brand-mark-char">文</span>
-            </div>
+            {logoFailed ? (
+              <div className="wl-brand-mark" aria-hidden="true">
+                <span className="font-zh wl-brand-mark-char">文</span>
+              </div>
+            ) : (
+              <img
+                src="/images/wenxinlens.png"
+                alt="WenxinLens logo"
+                className="wl-brand-logo"
+                onError={() => setLogoFailed(true)}
+              />
+            )}
             <div className="wl-brand-text">
               <span className="font-zh wl-brand-zh">文心镜</span>
               <span className="wl-brand-dot">·</span>
@@ -53,7 +64,8 @@ export function Navbar() {
 
           <div className="wl-nav-links" aria-label="Sections">
             {navItems.map((item) => {
-              const active = pathname.startsWith('/knowledge') && item.href === '/knowledge'
+              const active = (pathname.startsWith('/knowledge') && item.href === '/knowledge') ||
+                (pathname.startsWith('/lab') && item.href === '/lab')
               return (
                 <Link
                   key={item.href}

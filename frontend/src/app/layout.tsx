@@ -11,10 +11,16 @@ const notoSansSC = Noto_Sans_SC({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:5173'),
   title: 'WenxinLens — AI Cultural Guide for Chinese Architecture',
   description:
     'Point your camera at Chinese ancient architecture to discover its history, symbolism, and cultural significance through AI.',
   keywords: ['Chinese architecture', 'AI', 'cultural heritage', 'ancient buildings', 'history'],
+  icons: {
+    icon: '/images/wenxinlens.png',
+    shortcut: '/images/wenxinlens.png',
+    apple: '/images/wenxinlens.png',
+  },
   openGraph: {
     title: 'WenxinLens',
     description: 'AI Cultural Interpretation for Chinese Ancient Architecture',

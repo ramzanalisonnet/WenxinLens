@@ -43,6 +43,14 @@ class AgentState(TypedDict, total=False):
     chat_response: str
     sources: list[dict]
 
+    # Advanced feature layer output
+    time_reconstruction: dict
+    historical_character: dict
+    cultural_dna: dict
+    cross_civilization: dict
+    cinematic_story: dict
+    advanced_feature_summary: str
+
     # Control
     error: Optional[str]
     step: str

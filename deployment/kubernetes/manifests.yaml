@@ -28,6 +28,12 @@ spec:
               value: "milvus-service"
             - name: NEO4J_URI
               value: "bolt://neo4j-service:7687"
+            - name: ENABLE_GPU_DIFFUSION
+              value: "false"
+            - name: ADVANCED_FEATURE_CACHE_TTL_SECONDS
+              value: "7200"
+            - name: TIME_RECONSTRUCTION_MODEL
+              value: "stabilityai/stable-diffusion-xl-base-1.0"
             - name: REDIS_URL
               valueFrom:
                 secretKeyRef:

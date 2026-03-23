@@ -1,6 +1,12 @@
 // API client for WenxinLens backend
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
-import type { RecognitionResult, ChatResponse, SiteInfo, BuildingKnowledge } from '@/types'
+import type {
+  RecognitionResult,
+  ChatResponse,
+  SiteInfo,
+  BuildingKnowledge,
+  AdvancedFeaturesResponse,
+} from '@/types'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -161,6 +167,32 @@ export const voiceApi = {
 
   listVoices: async (language?: string) => {
     const { data } = await api.get('/voice/voices', { params: { language } })
+    return data
+  },
+}
+
+// ── Advanced Features ───────────────────────────────────────
+export const advancedApi = {
+  runAll: async (payload: {
+    building_name: string
+    dynasty: string
+    architecture_style: string
+    structural_features: string[]
+    language?: 'en' | 'zh'
+    user_message?: string
+  }): Promise<AdvancedFeaturesResponse> => {
+    const { data } = await api.post<AdvancedFeaturesResponse>('/advanced/all', payload)
+    return data
+  },
+
+  historicalCharacterChat: async (payload: {
+    building_name: string
+    dynasty: string
+    character_type: string
+    message: string
+    language?: 'en' | 'zh'
+  }): Promise<{ character: string; persona_name: string; reply: string }> => {
+    const { data } = await api.post('/advanced/historical-character', payload)
     return data
   },
 }

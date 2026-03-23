@@ -21,7 +21,7 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 
 from config import get_settings
-from api.routes import recognition, chat, tour, voice, knowledge, health
+from api.routes import recognition, chat, tour, voice, knowledge, health, advanced
 from middleware.auth import APIKeyMiddleware
 from middleware.logging import RequestLoggingMiddleware
 from middleware.rate_limiter import limiter
@@ -107,6 +107,7 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
+            allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -127,6 +128,7 @@ def create_app() -> FastAPI:
     app.include_router(tour.router, prefix="/api/v1/tour", tags=["Tour"])
     app.include_router(voice.router, prefix="/api/v1/voice", tags=["Voice"])
     app.include_router(knowledge.router, prefix="/api/v1/knowledge", tags=["Knowledge"])
+    app.include_router(advanced.router, prefix="/api/v1/advanced", tags=["Advanced Features"])
 
     # ── Global exception handlers ──────────────────────────────
     @app.exception_handler(Exception)

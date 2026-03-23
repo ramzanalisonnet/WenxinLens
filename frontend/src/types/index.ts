@@ -83,5 +83,70 @@ export interface GraphEdge {
   relation: string
 }
 
+export interface TimeReconstructionSnapshot {
+  dynasty: string
+  prompt: string
+  image_url: string
+  explanation: string
+}
+
+export interface TimeReconstructionData {
+  building_name: string
+  current_dynasty: string
+  snapshots: TimeReconstructionSnapshot[]
+}
+
+export interface HistoricalCharacterData {
+  character: string
+  persona_name: string
+  reply: string
+}
+
+export interface CulturalDnaData {
+  building_name: string
+  scores: {
+    confucian_influence: number
+    taoist_symbolism: number
+    buddhist_influence: number
+    imperial_authority: number
+    regional_influence: number
+    symbolism_density: number
+  }
+  analysis: string
+}
+
+export interface ComparisonItem {
+  building: string
+  civilization: string
+  style: string
+  similarity: number
+}
+
+export interface CrossCivilizationData {
+  building_name: string
+  comparisons: ComparisonItem[]
+  narrative: string
+}
+
+export interface CinematicStoryData {
+  building_name: string
+  script: string
+  scene_plan: Array<{ scene: number; title: string; focus: string }>
+  audio: {
+    provider: string
+    status: string
+    audio_url: string
+  }
+}
+
+export interface AdvancedFeaturesResponse {
+  time_reconstruction: TimeReconstructionData
+  historical_character: HistoricalCharacterData
+  cultural_dna: CulturalDnaData
+  cross_civilization: CrossCivilizationData
+  cinematic_story: CinematicStoryData
+  summary: string
+}
+
 export type Language = 'en' | 'zh'
 export type DetailLevel = 'tourist' | 'standard' | 'academic'

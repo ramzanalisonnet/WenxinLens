@@ -348,47 +348,47 @@ export default function HomePage() {
 
       <footer className="section-block" style={{ paddingTop: '64px', paddingBottom: '48px' }}>
         <div className="container-1200">
-          <div className="panel p-8">
-            <div className="grid-12">
-              <div className="col-span-12 md:col-span-4">
+          <div className="panel p-8 wl-footer-panel">
+            <div className="grid-12 wl-footer-grid">
+              <div className="col-span-12 md:col-span-4 wl-footer-col wl-footer-col-brand">
                 <p className="title-card">WenxinLens</p>
-                <p className="text-body mt-3">AI cultural interpretation platform for Chinese architectural heritage.</p>
+                <p className="text-body mt-3 wl-footer-brand-copy">AI cultural interpretation platform for Chinese architectural heritage.</p>
               </div>
 
-              <div className="col-span-6 md:col-span-2">
-                <p className="text-caption" style={{ color: '#E6EAF2' }}>Explore</p>
-                <ul className="mt-3 space-y-2 text-caption">
-                  <li><Link href="/#features">Features</Link></li>
-                  <li><Link href="/#architecture">Architecture</Link></li>
-                  <li><Link href="/tour">Tour</Link></li>
+              <div className="col-span-6 md:col-span-2 wl-footer-col">
+                <p className="wl-footer-heading">Explore</p>
+                <ul className="wl-footer-links">
+                  <li><Link href="/#features" className="wl-footer-link">Features</Link></li>
+                  <li><Link href="/#architecture" className="wl-footer-link">Architecture</Link></li>
+                  <li><Link href="/tour" className="wl-footer-link">Tour</Link></li>
                 </ul>
               </div>
 
-              <div className="col-span-6 md:col-span-2">
-                <p className="text-caption" style={{ color: '#E6EAF2' }}>Resources</p>
-                <ul className="mt-3 space-y-2 text-caption">
-                  <li><Link href="/knowledge">Knowledge</Link></li>
-                  <li><Link href="/chat">AI Guide</Link></li>
-                  <li><Link href="/recognize">Recognition</Link></li>
+              <div className="col-span-6 md:col-span-2 wl-footer-col">
+                <p className="wl-footer-heading">Resources</p>
+                <ul className="wl-footer-links">
+                  <li><Link href="/knowledge" className="wl-footer-link">Knowledge</Link></li>
+                  <li><Link href="/chat" className="wl-footer-link">AI Guide</Link></li>
+                  <li><Link href="/recognize" className="wl-footer-link">Recognition</Link></li>
                 </ul>
               </div>
 
-              <div className="col-span-6 md:col-span-2">
-                <p className="text-caption" style={{ color: '#E6EAF2' }}>About</p>
-                <ul className="mt-3 space-y-2 text-caption">
-                  <li><Link href="/#about">Mission</Link></li>
-                  <li><Link href="/#about">Design</Link></li>
-                  <li><Link href="/#about">Team</Link></li>
+              <div className="col-span-6 md:col-span-2 wl-footer-col">
+                <p className="wl-footer-heading">About</p>
+                <ul className="wl-footer-links">
+                  <li><Link href="/#about" className="wl-footer-link">Mission</Link></li>
+                  <li><Link href="/#about" className="wl-footer-link">Design</Link></li>
+                  <li><Link href="/#about" className="wl-footer-link">Team</Link></li>
                 </ul>
               </div>
 
-              <div className="col-span-6 md:col-span-2">
-                <p className="text-caption" style={{ color: '#E6EAF2' }}>Contact</p>
-                <div className="mt-3 flex items-center justify-start gap-3">
-                  <a href="#" aria-label="GitHub" className="btn btn-secondary p-2"><Github size={16} /></a>
-                  <a href="#" aria-label="Instagram" className="btn btn-secondary p-2"><Instagram size={16} /></a>
-                  <a href="#" aria-label="YouTube" className="btn btn-secondary p-2"><Youtube size={16} /></a>
-                  <a href="#" aria-label="Email" className="btn btn-secondary p-2"><Mail size={16} /></a>
+              <div className="col-span-12 sm:col-span-6 md:col-span-2 wl-footer-col wl-footer-col-contact">
+                <p className="wl-footer-heading">Contact</p>
+                <div className="wl-social-row wl-social-grid">
+                  <a href="#" aria-label="GitHub" className="wl-social-btn"><Github size={18} /></a>
+                  <a href="#" aria-label="Instagram" className="wl-social-btn"><Instagram size={18} /></a>
+                  <a href="#" aria-label="YouTube" className="wl-social-btn"><Youtube size={18} /></a>
+                  <a href="#" aria-label="Email" className="wl-social-btn"><Mail size={18} /></a>
                 </div>
               </div>
             </div>
