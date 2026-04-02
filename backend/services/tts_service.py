@@ -43,14 +43,18 @@ class TTSService:
     ) -> bytes:
         import azure.cognitiveservices.speech as speechsdk  # type: ignore[import-untyped]
 
+        low_lang = (language or "en").lower()
+        xml_lang = "zh-CN" if low_lang.startswith("zh") else "en-US"
+        lang_key = "zh" if low_lang.startswith("zh") else "en"
+
         voice_map = {
             ("en", "default"): "en-US-JennyNeural",
             ("zh", "default"): "zh-CN-XiaoxiaoNeural",
         }
-        voice = voice_id if voice_id != "default" else voice_map.get((language, "default"), "en-US-JennyNeural")
+        voice = voice_id if voice_id != "default" else voice_map.get((lang_key, "default"), "en-US-JennyNeural")
 
         ssml = f"""<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis'
-                    xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='{language}'>
+                    xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='{xml_lang}'>
             <voice name='{voice}'>
                 <prosody rate='{speed:.1f}'>
                     {xml_escape(text)}

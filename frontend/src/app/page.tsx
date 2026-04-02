@@ -21,6 +21,7 @@ import { knowledgeApi } from '@/services/api'
 import type { DynastyCatalogItem } from '@/types'
 
 type Lang = 'en' | 'zh'
+type Theme = 'dark' | 'light'
 
 const features = [
   {
@@ -158,6 +159,7 @@ const fallbackDynastyCatalog: DynastyCatalogItem[] = [
 export default function HomePage() {
   const reduceMotion = useReducedMotion()
   const [lang, setLang] = useState<Lang>('en')
+  const [theme, setTheme] = useState<Theme>('dark')
   const { data: dynastyCatalog } = useQuery({
     queryKey: ['home-dynasty-catalog'],
     queryFn: () => knowledgeApi.getDynastyCatalog(),
@@ -169,6 +171,11 @@ export default function HomePage() {
       setLang(stored)
     }
 
+    const storedTheme = window.localStorage.getItem('wenxinlens-theme')
+    if (storedTheme === 'light' || storedTheme === 'dark') {
+      setTheme(storedTheme)
+    }
+
     const onLangChange = (event: Event) => {
       const custom = event as CustomEvent<Lang>
       if (custom.detail === 'en' || custom.detail === 'zh') {
@@ -176,8 +183,19 @@ export default function HomePage() {
       }
     }
 
+    const onThemeChange = (event: Event) => {
+      const custom = event as CustomEvent<Theme>
+      if (custom.detail === 'light' || custom.detail === 'dark') {
+        setTheme(custom.detail)
+      }
+    }
+
     window.addEventListener('wenxinlens-lang-change', onLangChange as EventListener)
-    return () => window.removeEventListener('wenxinlens-lang-change', onLangChange as EventListener)
+    window.addEventListener('wenxinlens-theme-change', onThemeChange as EventListener)
+    return () => {
+      window.removeEventListener('wenxinlens-lang-change', onLangChange as EventListener)
+      window.removeEventListener('wenxinlens-theme-change', onThemeChange as EventListener)
+    }
   }, [])
 
   const t = {
@@ -199,6 +217,8 @@ export default function HomePage() {
   }
 
   const timelineCatalog = dynastyCatalog && dynastyCatalog.length > 0 ? dynastyCatalog : fallbackDynastyCatalog
+  const recognitionSectionImage = theme === 'light' ? '/images/section-recognition-light.svg' : '/images/section-recognition.svg'
+  const knowledgeSectionImage = theme === 'light' ? '/images/section-knowledge-light.svg' : '/images/section-knowledge.svg'
 
   return (
     <div className="app-shell">
@@ -375,8 +395,8 @@ export default function HomePage() {
 
         <section className="section-block" aria-labelledby="recognition-title">
           <div className="container-1200">
-            <div className="grid-12 items-center">
-              <article className="col-span-12 lg:col-span-6 panel p-8">
+            <div className="grid-12 items-stretch">
+              <article className="col-span-12 lg:col-span-6 panel p-8 h-full flex flex-col justify-center feature-pair-copy">
                 <h2 id="recognition-title" className="title-section">
                   AI Recognition (建筑识别)
                 </h2>
@@ -390,10 +410,10 @@ export default function HomePage() {
                 </Link>
               </article>
 
-              <div className="col-span-12 lg:col-span-6">
+              <div className="col-span-12 lg:col-span-6 h-full feature-pair-visual">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/section-recognition.svg"
+                  src={recognitionSectionImage}
                   alt="Temple of Heaven"
                   className="card-image"
                 />
@@ -404,17 +424,17 @@ export default function HomePage() {
 
         <section className="section-block" aria-labelledby="knowledge-title">
           <div className="container-1200">
-            <div className="grid-12 items-center">
-              <div className="col-span-12 lg:col-span-6 order-2 lg:order-1">
+            <div className="grid-12 items-stretch">
+              <div className="col-span-12 lg:col-span-6 order-2 lg:order-1 h-full feature-pair-visual">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/section-knowledge.svg"
+                  src={knowledgeSectionImage}
                   alt="Ancient Chinese timber architecture"
                   className="card-image"
                 />
               </div>
 
-              <article className="col-span-12 lg:col-span-6 panel p-8 order-1 lg:order-2">
+              <article className="col-span-12 lg:col-span-6 panel p-8 order-1 lg:order-2 h-full flex flex-col justify-center feature-pair-copy">
                 <h2 id="knowledge-title" className="title-section">
                   Knowledge Base (知识库)
                 </h2>

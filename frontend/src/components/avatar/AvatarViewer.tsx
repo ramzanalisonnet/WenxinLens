@@ -116,27 +116,92 @@ function GLBAvatar({ state, visemeLevel, visemeCode }: { state: AvatarState; vis
 }
 
 function PlaceholderAvatar({ state, visemeLevel, visemeCode }: { state: AvatarState; visemeLevel: number; visemeCode: string }) {
+  const rootRef = useRef<Group>(null)
   const weight = visemeWeight(visemeCode, visemeLevel)
-  const mouthScaleY = state === 'SPEAKING' ? 0.3 + weight * 1.6 : 0.45
-  const mouthScaleX = state === 'SPEAKING' ? 0.2 + weight * 0.6 : 0.24
-  const bodyColor =
-    state === 'THINKING' ? '#3B4D7A' : state === 'LISTENING' ? '#305D58' : state === 'SPEAKING' ? '#6D3D3D' : '#2E3550'
+  const mouthScaleY = state === 'SPEAKING' ? 0.12 + weight * 0.42 : 0.1
+  const mouthScaleX = state === 'SPEAKING' ? 0.16 + weight * 0.2 : 0.17
+  const jacketColor = state === 'THINKING' ? '#22355E' : state === 'LISTENING' ? '#1F4E4A' : '#1F2B45'
+  const accentColor = state === 'SPEAKING' ? '#FF6B6D' : '#00D1B2'
+
+  useFrame(({ clock }) => {
+    if (!rootRef.current) return
+    const t = clock.getElapsedTime()
+    rootRef.current.rotation.y = Math.sin(t * 0.55) * 0.06
+    rootRef.current.position.y = -0.46 + Math.sin(t * 1.4) * 0.016
+  })
 
   return (
-    <group position={[0, -0.25, 0]}>
-      <mesh position={[0, 1.0, 0]}>
-        <sphereGeometry args={[0.52, 32, 32]} />
-        <meshStandardMaterial color={bodyColor} metalness={0.2} roughness={0.5} />
+    <group ref={rootRef} position={[0, -0.46, 0]}>
+      <mesh position={[0, 1.26, -0.5]}>
+        <torusGeometry args={[0.98, 0.026, 24, 96]} />
+        <meshStandardMaterial color={accentColor} emissive={accentColor} emissiveIntensity={0.3} transparent opacity={0.28} />
       </mesh>
 
-      <mesh position={[0, 0.9, 0.47]} scale={[mouthScaleX, mouthScaleY, 0.1]}>
+      <mesh position={[0, 1.1, 0]} scale={[0.94, 1.0, 0.94]}>
+        <sphereGeometry args={[0.47, 44, 44]} />
+        <meshStandardMaterial color={'#F5C9A8'} metalness={0.02} roughness={0.62} />
+      </mesh>
+
+      <mesh position={[0, 1.31, -0.02]} scale={[0.96, 0.66, 1.0]}>
+        <sphereGeometry args={[0.5, 44, 44]} />
+        <meshStandardMaterial color={'#1A2134'} metalness={0.18} roughness={0.38} />
+      </mesh>
+
+      <mesh position={[0, 0.78, 0.03]} scale={[0.22, 0.3, 0.22]}>
+        <capsuleGeometry args={[0.24, 0.55, 8, 24]} />
+        <meshStandardMaterial color={'#E9B590'} roughness={0.65} />
+      </mesh>
+
+      <mesh position={[0, 0.18, 0]} scale={[0.96, 1.05, 0.84]}>
+        <capsuleGeometry args={[0.52, 0.92, 8, 32]} />
+        <meshStandardMaterial color={jacketColor} metalness={0.08} roughness={0.52} />
+      </mesh>
+
+      <mesh position={[0, 0.38, 0.34]} scale={[0.34, 0.42, 0.08]}>
         <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color={'#BFC8DF'} metalness={0.1} roughness={0.6} />
+        <meshStandardMaterial color={'#F4F7FF'} roughness={0.36} />
       </mesh>
 
-      <mesh position={[0, 0.1, 0]}>
-        <capsuleGeometry args={[0.48, 1.0, 6, 16]} />
-        <meshStandardMaterial color={'#1E2640'} metalness={0.2} roughness={0.6} />
+      <mesh position={[0, 0.2, 0.39]} scale={[0.09, 0.27, 0.07]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color={'#2C6FD6'} metalness={0.14} roughness={0.4} />
+      </mesh>
+
+      <mesh position={[-0.2, 1.11, 0.4]} scale={[0.11, 0.075, 0.07]}>
+        <sphereGeometry args={[1, 20, 20]} />
+        <meshStandardMaterial color={'#FFFFFF'} roughness={0.22} />
+      </mesh>
+      <mesh position={[0.2, 1.11, 0.4]} scale={[0.11, 0.075, 0.07]}>
+        <sphereGeometry args={[1, 20, 20]} />
+        <meshStandardMaterial color={'#FFFFFF'} roughness={0.22} />
+      </mesh>
+
+      <mesh position={[-0.2, 1.11, 0.46]} scale={[0.04, 0.04, 0.04]}>
+        <sphereGeometry args={[1, 16, 16]} />
+        <meshStandardMaterial color={'#1E2C45'} roughness={0.25} />
+      </mesh>
+      <mesh position={[0.2, 1.11, 0.46]} scale={[0.04, 0.04, 0.04]}>
+        <sphereGeometry args={[1, 16, 16]} />
+        <meshStandardMaterial color={'#1E2C45'} roughness={0.25} />
+      </mesh>
+
+      <mesh position={[0, 1.01, 0.45]} rotation={[Math.PI / 2.2, 0, 0]} scale={[0.03, 0.07, 0.03]}>
+        <coneGeometry args={[1, 1, 16]} />
+        <meshStandardMaterial color={'#D4A17D'} roughness={0.62} />
+      </mesh>
+
+      <mesh position={[0, 0.92, 0.46]} scale={[mouthScaleX, mouthScaleY, 0.04]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color={'#8B3942'} metalness={0.05} roughness={0.45} />
+      </mesh>
+
+      <mesh position={[-0.58, 0.2, -0.01]} scale={[0.29, 0.4, 0.48]}>
+        <sphereGeometry args={[1, 20, 20]} />
+        <meshStandardMaterial color={jacketColor} metalness={0.08} roughness={0.52} />
+      </mesh>
+      <mesh position={[0.58, 0.2, -0.01]} scale={[0.29, 0.4, 0.48]}>
+        <sphereGeometry args={[1, 20, 20]} />
+        <meshStandardMaterial color={jacketColor} metalness={0.08} roughness={0.52} />
       </mesh>
     </group>
   )
@@ -167,14 +232,22 @@ export function AvatarViewer({ state, visemeLevel, visemeCode }: AvatarViewerPro
   return (
     <div className="panel p-4" style={{ minHeight: 420 }}>
       <div className="surface-soft" style={{ height: 380, borderRadius: 14, overflow: 'hidden' }}>
-        <Canvas camera={{ position: [0, 1.2, 2.4], fov: 40 }}>
-          <ambientLight intensity={0.7} />
-          <directionalLight position={[4, 5, 3]} intensity={1.0} />
-          <directionalLight position={[-3, 2, -2]} intensity={0.35} />
+        <Canvas camera={{ position: [0, 0.95, 3.15], fov: 34 }}>
+          <ambientLight intensity={0.45} />
+          <hemisphereLight intensity={0.7} color={'#f1f5ff'} groundColor={'#1e293b'} />
+          <directionalLight position={[4, 5, 3]} intensity={1.15} />
+          <directionalLight position={[-3, 2, -2]} intensity={0.42} />
           <Suspense fallback={fallback}>
             {hasModel ? <GLBAvatar state={state} visemeLevel={visemeLevel} visemeCode={visemeCode} /> : fallback}
           </Suspense>
-          <OrbitControls enablePan={false} enableDamping minDistance={1.6} maxDistance={3.0} maxPolarAngle={1.8} />
+          <OrbitControls
+            enablePan={false}
+            enableDamping
+            target={[0, 0.62, 0]}
+            minDistance={2.5}
+            maxDistance={3.8}
+            maxPolarAngle={1.7}
+          />
         </Canvas>
       </div>
     </div>

@@ -2,11 +2,12 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Languages, Menu, X } from 'lucide-react'
+import { Languages, Menu, Moon, Sun, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 type Lang = 'en' | 'zh'
+type Theme = 'dark' | 'light'
 
 const navItems = [
   { href: '/#features', en: 'Features', zh: '功能' },
@@ -20,6 +21,7 @@ const navItems = [
 export function Navbar() {
   const pathname = usePathname()
   const [lang, setLang] = useState<Lang>('en')
+  const [theme, setTheme] = useState<Theme>('dark')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [logoFailed, setLogoFailed] = useState(false)
 
@@ -29,6 +31,11 @@ export function Navbar() {
       setLang(stored)
       document.documentElement.lang = stored
     }
+
+    const storedTheme = window.localStorage.getItem('wenxinlens-theme')
+    const nextTheme: Theme = storedTheme === 'light' ? 'light' : 'dark'
+    setTheme(nextTheme)
+    document.documentElement.setAttribute('data-theme', nextTheme)
   }, [])
 
   const toggleLanguage = () => {
@@ -37,6 +44,14 @@ export function Navbar() {
     window.localStorage.setItem('wenxinlens-lang', next)
     document.documentElement.lang = next
     window.dispatchEvent(new CustomEvent('wenxinlens-lang-change', { detail: next }))
+  }
+
+  const toggleTheme = () => {
+    const next: Theme = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    window.localStorage.setItem('wenxinlens-theme', next)
+    document.documentElement.setAttribute('data-theme', next)
+    window.dispatchEvent(new CustomEvent('wenxinlens-theme-change', { detail: next }))
   }
 
   return (
@@ -81,6 +96,10 @@ export function Navbar() {
           </div>
 
           <div className="wl-nav-actions">
+            <button onClick={toggleTheme} className="wl-theme-btn" aria-label="Toggle theme">
+              {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+              {theme === 'dark' ? 'Light' : 'Dark'}
+            </button>
             <button onClick={toggleLanguage} className="wl-lang-btn" aria-label="Toggle language">
               <Languages size={14} />
               {lang === 'en' ? 'EN / 中' : '中 / EN'}
@@ -116,6 +135,11 @@ export function Navbar() {
             className="wl-nav-mobile"
           >
             <div className="container-1200 wl-nav-mobile-inner">
+              <button onClick={toggleTheme} className="wl-theme-btn wl-lang-btn-mobile">
+                {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+                {theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+              </button>
+
               <button onClick={toggleLanguage} className="wl-lang-btn wl-lang-btn-mobile">
                 <Languages size={14} />
                 {lang === 'en' ? 'Switch to Chinese' : '切换到英文'}

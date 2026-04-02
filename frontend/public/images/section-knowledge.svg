@@ -1,17 +1,43 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Knowledge base illustration">
   <rect width="1200" height="800" fill="#121B31"/>
+  <rect x="120" y="120" width="960" height="560" rx="16" fill="#0F1830" stroke="#E6EAF2" stroke-opacity="0.22"/>
   <g fill="#1C2238" stroke="#E6EAF2" stroke-opacity="0.18">
-    <rect x="140" y="180" width="260" height="180" rx="12"/>
-    <rect x="470" y="120" width="260" height="180" rx="12"/>
-    <rect x="800" y="190" width="260" height="180" rx="12"/>
-    <rect x="300" y="450" width="260" height="180" rx="12"/>
-    <rect x="650" y="430" width="260" height="180" rx="12"/>
+    <rect x="180" y="170" width="260" height="180" rx="12"/>
+    <rect x="470" y="130" width="260" height="180" rx="12"/>
+    <rect x="760" y="180" width="260" height="180" rx="12"/>
+    <rect x="260" y="430" width="260" height="180" rx="12"/>
+    <rect x="680" y="410" width="260" height="180" rx="12"/>
   </g>
   <g stroke="#00D1B2" stroke-width="4" opacity="0.8">
-    <line x1="400" y1="270" x2="470" y2="210"/>
-    <line x1="730" y1="210" x2="800" y2="280"/>
-    <line x1="400" y1="540" x2="560" y2="540"/>
-    <line x1="730" y1="520" x2="800" y2="370"/>
+    <line x1="440" y1="260" x2="470" y2="230"/>
+    <line x1="730" y1="230" x2="760" y2="270"/>
+    <line x1="520" y1="520" x2="680" y2="500"/>
+    <line x1="730" y1="500" x2="760" y2="360"/>
   </g>
-  <circle cx="600" cy="380" r="95" fill="#FF4D4F" opacity="0.18"/>
+  <circle cx="600" cy="390" r="95" fill="#FF4D4F" opacity="0.2"/>
+
+  <g font-family="Inter, sans-serif" fill="#E6EAF2">
+    <text x="212" y="214" font-size="30" font-weight="700">Dynasties</text>
+    <text x="212" y="248" font-size="20" opacity="0.84">Tang • Song • Yuan</text>
+    <text x="212" y="276" font-size="20" opacity="0.84">Ming • Qing</text>
+
+    <text x="502" y="174" font-size="30" font-weight="700">Styles</text>
+    <text x="502" y="208" font-size="20" opacity="0.84">Palace • Pagoda</text>
+    <text x="502" y="236" font-size="20" opacity="0.84">Temple • Garden</text>
+
+    <text x="790" y="224" font-size="30" font-weight="700">Symbolism</text>
+    <text x="790" y="258" font-size="20" opacity="0.84">Ritual • Power</text>
+    <text x="790" y="286" font-size="20" opacity="0.84">Cosmology</text>
+
+    <text x="292" y="474" font-size="30" font-weight="700">Construction</text>
+    <text x="292" y="508" font-size="20" opacity="0.84">Dougong • Timber</text>
+    <text x="292" y="536" font-size="20" opacity="0.84">Masonry Systems</text>
+
+    <text x="712" y="454" font-size="30" font-weight="700">Geography</text>
+    <text x="712" y="488" font-size="20" opacity="0.84">Beijing • Xi'an</text>
+    <text x="712" y="516" font-size="20" opacity="0.84">Suzhou • Hangzhou</text>
+  </g>
+
+  <text x="520" y="398" font-family="Inter, sans-serif" font-size="26" font-weight="700" fill="#FFD2D2">Knowledge</text>
+  <text x="553" y="430" font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="#FFD2D2">Graph</text>
 </svg>

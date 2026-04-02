@@ -13,6 +13,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [sessionError, setSessionError] = useState<string | null>(null)
   const [language, setLanguage] = useState<Language>('en')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -21,13 +22,19 @@ export default function ChatPage() {
   }, [messages])
 
   const initSession = async () => {
-    const { session_id } = await chatApi.createSession(language)
-    setSessionId(session_id)
-    setMessages([])
+    try {
+      const { session_id } = await chatApi.createSession(language)
+      setSessionId(session_id)
+      setMessages([])
+      setSessionError(null)
+    } catch (err: any) {
+      setSessionId(null)
+      setSessionError(err?.message || 'Unable to connect to chat service. Please try again.')
+    }
   }
 
   useEffect(() => {
-    initSession()
+    void initSession()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -74,7 +81,13 @@ export default function ChatPage() {
   }
 
   const clearSession = async () => {
-    if (sessionId) await chatApi.deleteSession(sessionId)
+    if (sessionId) {
+      try {
+        await chatApi.deleteSession(sessionId)
+      } catch {
+        // Ignore delete errors; creating a fresh session is the priority.
+      }
+    }
     await initSession()
   }
 
@@ -141,6 +154,18 @@ export default function ChatPage() {
 
         {/* Messages area */}
         <div className="flex-1 overflow-y-auto space-y-5 pr-2 min-h-0 pb-4 rounded-2xl panel-elevated p-4" style={{ maxHeight: 'calc(100vh - 320px)' }}>
+          {sessionError && (
+            <div
+              className="rounded-xl px-4 py-3 text-sm flex items-center justify-between gap-3"
+              style={{ background: 'rgba(255,77,79,0.12)', border: '1px solid rgba(255,77,79,0.28)', color: '#FFBFC0' }}
+            >
+              <span>{sessionError}</span>
+              <button className="btn btn-secondary" onClick={() => void initSession()}>
+                Retry
+              </button>
+            </div>
+          )}
+
           {messages.length === 0 && (
             <motion.div
               initial={{ opacity: 0, y: 12 }}

@@ -49,6 +49,21 @@ CHARACTER_CONFIG: dict[str, CharacterConfig] = {
     ),
 }
 
+CHARACTER_VOICE_BY_LANGUAGE: dict[str, dict[str, str]] = {
+    "en": {
+        "emperor": "en-US-GuyNeural",
+        "architect": "en-US-DavisNeural",
+        "scholar": "en-GB-RyanNeural",
+        "guide": "en-US-JennyNeural",
+    },
+    "zh": {
+        "emperor": "zh-CN-YunyangNeural",
+        "architect": "zh-CN-XiaoxiaoNeural",
+        "scholar": "zh-CN-YunxiNeural",
+        "guide": "zh-CN-XiaoyiNeural",
+    },
+}
+
 _VOWELS = set("aeiou")
 
 
@@ -64,25 +79,49 @@ class AvatarService:
     def get_character_config(character_type: str) -> CharacterConfig:
         return CHARACTER_CONFIG.get(character_type.lower(), CHARACTER_CONFIG["guide"])
 
+    @staticmethod
+    def _normalize_language(language: str) -> str:
+        low = (language or "en").lower()
+        if low.startswith("zh"):
+            return "zh"
+        return "en"
+
+    def _resolve_voice_id(self, character_type: str, language: str) -> str:
+        lang = self._normalize_language(language)
+        char = (character_type or "guide").lower()
+        return CHARACTER_VOICE_BY_LANGUAGE.get(lang, {}).get(char, CHARACTER_VOICE_BY_LANGUAGE[lang]["guide"])
+
     async def synthesize_character_speech(
         self,
         text: str,
         character_type: str,
         language: str = "en",
     ) -> tuple[bytes, str]:
-        cfg = self.get_character_config(character_type)
+        voice_id = self._resolve_voice_id(character_type, language)
         try:
             data = await self._tts.synthesize(
                 text=text,
                 language=language,
-                voice_id=cfg.voice_id,
+                voice_id=voice_id,
                 speed=1.0,
                 pitch=1.0,
             )
             return data, "audio/mpeg"
         except Exception as exc:
-            logger.warning(f"Avatar TTS fallback used: {exc}")
-            return self._fallback_wav(), "audio/wav"
+            logger.warning(f"Avatar TTS primary voice failed ({voice_id}): {exc}")
+            try:
+                # Retry with provider default voice to avoid returning beep when a specific voice is unavailable.
+                data = await self._tts.synthesize(
+                    text=text,
+                    language=self._normalize_language(language),
+                    voice_id="default",
+                    speed=1.0,
+                    pitch=1.0,
+                )
+                return data, "audio/mpeg"
+            except Exception as retry_exc:
+                logger.warning(f"Avatar TTS fallback used after retry failure: {retry_exc}")
+                return self._fallback_wav(), "audio/wav"
 
     @staticmethod
     def _fallback_wav(duration_sec: float = 0.9, freq: float = 220.0) -> bytes:

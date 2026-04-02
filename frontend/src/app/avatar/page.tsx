@@ -75,19 +75,87 @@ export default function AvatarPage() {
     ])
   }
 
+  const isLikelyFallbackBeep = (blob: Blob) => {
+    const t = (blob.type || '').toLowerCase()
+    return t.includes('audio/wav') && blob.size > 0 && blob.size <= 90000
+  }
+
+  const speakWithBrowserTTS = (text: string) => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      return Promise.reject(new Error('Browser TTS unavailable'))
+    }
+
+    const synth = window.speechSynthesis
+    synth.cancel()
+
+    return new Promise<void>((resolve, reject) => {
+      const utterance = new SpeechSynthesisUtterance(text)
+      utterance.lang = language === 'zh' ? 'zh-CN' : 'en-US'
+      utterance.rate = 1.0
+      utterance.pitch = 1.0
+
+      const voices = synth.getVoices()
+      const langPrefix = language === 'zh' ? 'zh' : 'en'
+      const pickedVoice = voices.find((v) => v.lang.toLowerCase().startsWith(langPrefix))
+      if (pickedVoice) {
+        utterance.voice = pickedVoice
+      }
+
+      utterance.onend = () => resolve()
+      utterance.onerror = () => reject(new Error('Browser speech synthesis failed'))
+      synth.speak(utterance)
+    })
+  }
+
   const playSpeech = async (text: string) => {
     const [blob, lipsync] = await Promise.all([
       avatarApi.tts({ text, character_type: character, language }),
       avatarApi.lipsync({ text }),
     ])
 
-    const url = URL.createObjectURL(blob)
     const cues: AvatarLipSyncCue[] = lipsync.visemes || []
+    const animateFromTimeline = (elapsedMs: number) => {
+      const cue = cues.find((item) => elapsedMs >= item.start_ms && elapsedMs <= item.end_ms) || null
+      setVisemeCode(cue?.viseme || 'X')
+      setVisemeLevel(cue && cue.viseme !== 'X' ? 0.45 : 0.08)
+    }
 
     if (audioRef.current) {
       audioRef.current.pause()
       audioRef.current = null
     }
+
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current)
+      rafRef.current = null
+    }
+
+    if (isLikelyFallbackBeep(blob)) {
+      setAvatarState('SPEAKING')
+      sendWs('audio_ready', { state: 'SPEAKING', provider: 'browser' })
+
+      const startedAt = performance.now()
+      const timelineTick = () => {
+        const elapsedMs = performance.now() - startedAt
+        animateFromTimeline(elapsedMs)
+        rafRef.current = requestAnimationFrame(timelineTick)
+      }
+      timelineTick()
+
+      try {
+        await speakWithBrowserTTS(text)
+      } catch {
+        // If browser speech synthesis is unavailable, avoid throwing and keep chat flow intact.
+      } finally {
+        if (rafRef.current) cancelAnimationFrame(rafRef.current)
+        setVisemeLevel(0)
+        setVisemeCode('X')
+        setAvatarState('IDLE')
+      }
+      return
+    }
+
+    const url = URL.createObjectURL(blob)
 
     const audio = new Audio(url)
     audioRef.current = audio
