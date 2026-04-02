@@ -122,10 +122,10 @@ export default function ChatPage() {
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value as Language)}
-                className="bg-transparent text-white/80 text-xs focus:outline-none cursor-pointer font-medium"
+                className="wl-select text-xs cursor-pointer font-medium px-2 py-1"
               >
-                <option value="en" style={{ background: '#111122' }}>EN</option>
-                <option value="zh" style={{ background: '#111122' }}>中文</option>
+                <option value="en">EN</option>
+                <option value="zh">中文</option>
               </select>
             </div>
             <button

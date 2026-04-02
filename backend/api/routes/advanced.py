@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 class AdvancedFeatureRequest(BaseModel):
-    building_name: str = Field(min_length=1, max_length=200)
+    building_name: str = Field(default="Unknown Building", min_length=1, max_length=200)
     dynasty: str = Field(default="Unknown", min_length=1, max_length=80)
     architecture_style: str = Field(default="traditional chinese", min_length=1, max_length=120)
     structural_features: list[str] = Field(default_factory=list)
@@ -22,8 +22,8 @@ class AdvancedFeatureRequest(BaseModel):
 
 
 class HistoricalCharacterRequest(BaseModel):
-    building_name: str = Field(min_length=1, max_length=200)
-    dynasty: str = Field(min_length=1, max_length=80)
+    building_name: str = Field(default="Unknown Building", min_length=1, max_length=200)
+    dynasty: str = Field(default="Unknown", min_length=1, max_length=80)
     character_type: str = Field(default="architect", min_length=1, max_length=40)
     message: str = Field(min_length=1, max_length=2000)
     language: str = Field(default="en", pattern="^(en|zh)$")
@@ -61,8 +61,8 @@ async def historical_character_chat(
     body: HistoricalCharacterRequest,
     request: Request,
 ) -> dict:
-    orchestrator = _get_orchestrator(request)
     try:
+        orchestrator = _get_orchestrator(request)
         result = await orchestrator.run_historical_character_chat(
             building_name=body.building_name,
             dynasty=body.dynasty,

@@ -76,6 +76,11 @@ async def get_current_user(
     if credentials:
         return decode_access_token(credentials.credentials)
 
+    # In non-production environments, allow requests without explicit auth
+    # so local development and smoke checks work out of the box.
+    if not settings.is_production:
+        return {"sub": "dev-user", "role": "developer"}
+
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Authentication required",

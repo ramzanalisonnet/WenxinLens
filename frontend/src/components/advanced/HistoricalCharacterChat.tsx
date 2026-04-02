@@ -45,7 +45,7 @@ export function HistoricalCharacterChat({ seed, buildingName, dynasty, language 
 
       <div className="mt-4" style={{ display: 'grid', gap: '10px' }}>
         <label className="text-caption">Character Role</label>
-        <select value={character} onChange={(e) => setCharacter(e.target.value)} className="surface-soft" style={{ padding: '10px 12px', color: 'var(--text)' }}>
+        <select value={character} onChange={(e) => setCharacter(e.target.value)} className="surface-soft wl-select" style={{ padding: '10px 12px', color: 'var(--text)' }}>
           <option value="emperor">Emperor</option>
           <option value="architect">Architect</option>
           <option value="worker">Worker</option>

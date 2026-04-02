@@ -14,8 +14,11 @@ import {
   Mail,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { motion, useReducedMotion } from 'framer-motion'
 import { Navbar } from '../components/Navbar'
+import { knowledgeApi } from '@/services/api'
+import type { DynastyCatalogItem } from '@/types'
 
 type Lang = 'en' | 'zh'
 
@@ -54,47 +57,111 @@ const features = [
   },
 ]
 
-const dynasties = [
+const fallbackDynastyCatalog: DynastyCatalogItem[] = [
   {
-    eraEn: 'Tang Dynasty',
-    eraZh: '唐代',
-    descriptionEn: 'Monumental timber halls, axial planning, and imperial ceremonial architecture reached new maturity.',
-    descriptionZh: '木构大殿与中轴礼制空间达到高峰。',
-    image: '/images/timeline-tang.svg',
+    dynasty: 'Tang Dynasty',
+    dynasty_zh: '唐朝',
+    period: '618-907 CE',
+    places: [
+      {
+        id: 'fallback_tang',
+        name: 'Giant Wild Goose Pagoda',
+        name_zh: '大雁塔',
+        location: "Xi'an, Shaanxi",
+        coordinates: null,
+        architecture_type: 'Buddhist Pagoda',
+        year_built: '652',
+        image_url: '/images/timeline-tang.svg',
+        description: 'A Tang-era pagoda preserving scriptures and structural knowledge of masonry religious architecture.',
+        details: [],
+      },
+    ],
   },
   {
-    eraEn: 'Song Dynasty',
-    eraZh: '宋代',
-    descriptionEn: 'Refined proportions and modular systems highlighted technical precision and scholarly aesthetics.',
-    descriptionZh: '比例精炼、营造法式体系化，凸显工艺与文人审美。',
-    image: '/images/timeline-song.svg',
+    dynasty: 'Song Dynasty',
+    dynasty_zh: '宋朝',
+    period: '960-1279 CE',
+    places: [
+      {
+        id: 'fallback_song',
+        name: 'Fogong Temple Wooden Pagoda',
+        name_zh: '应县木塔',
+        location: 'Ying County, Shanxi',
+        coordinates: null,
+        architecture_type: 'Timber Pagoda',
+        year_built: '1056',
+        image_url: '/images/timeline-song.svg',
+        description: 'A Song landmark known for advanced timber structure and layered bracket engineering.',
+        details: [],
+      },
+    ],
   },
   {
-    eraEn: 'Yuan Dynasty',
-    eraZh: '元代',
-    descriptionEn: 'Cross-regional influences shaped spatial composition, religious architecture, and urban identity.',
-    descriptionZh: '多元文化影响下，宗教建筑与城市空间呈现新融合。',
-    image: '/images/timeline-yuan.svg',
+    dynasty: 'Yuan Dynasty',
+    dynasty_zh: '元朝',
+    period: '1271-1368 CE',
+    places: [
+      {
+        id: 'fallback_yuan',
+        name: 'White Stupa of Miaoying Temple',
+        name_zh: '妙应寺白塔',
+        location: 'Beijing',
+        coordinates: null,
+        architecture_type: 'Lamaist Stupa',
+        year_built: '1271',
+        image_url: '/images/timeline-yuan.svg',
+        description: 'A Yuan-period monument showing cross-cultural religious architecture in the imperial capital.',
+        details: [],
+      },
+    ],
   },
   {
-    eraEn: 'Ming Dynasty',
-    eraZh: '明代',
-    descriptionEn: 'Large palace compounds and ritual symbolism expanded with stronger construction standards.',
-    descriptionZh: '宫殿群规模扩大，礼制符号与营建规范更加明确。',
-    image: '/images/timeline-ming.svg',
+    dynasty: 'Ming Dynasty',
+    dynasty_zh: '明朝',
+    period: '1368-1644 CE',
+    places: [
+      {
+        id: 'fallback_ming',
+        name: 'Forbidden City',
+        name_zh: '故宫',
+        location: 'Beijing',
+        coordinates: null,
+        architecture_type: 'Imperial Palace Architecture',
+        year_built: '1406',
+        image_url: '/images/timeline-ming.svg',
+        description: 'A mature expression of Ming palace planning, ritual hierarchy, and timber-hall construction.',
+        details: [],
+      },
+    ],
   },
   {
-    eraEn: 'Qing Dynasty',
-    eraZh: '清代',
-    descriptionEn: 'Imperial architecture emphasized decorative richness, layered courtyards, and cultural continuity.',
-    descriptionZh: '装饰层次更丰富，院落系统强化，延续皇家建筑传统。',
-    image: '/images/timeline-qing.svg',
+    dynasty: 'Qing Dynasty',
+    dynasty_zh: '清朝',
+    period: '1644-1912 CE',
+    places: [
+      {
+        id: 'fallback_qing',
+        name: 'Summer Palace',
+        name_zh: '颐和园',
+        location: 'Beijing',
+        coordinates: null,
+        architecture_type: 'Imperial Garden Architecture',
+        year_built: '1750',
+        image_url: '/images/timeline-qing.svg',
+        description: 'A Qing imperial garden where architecture, topography, and symbolic landscape are integrated.',
+        details: [],
+      },
+    ],
   },
 ]
 
 export default function HomePage() {
   const reduceMotion = useReducedMotion()
   const [lang, setLang] = useState<Lang>('en')
+  const { data: dynastyCatalog } = useQuery({
+    queryKey: ['home-dynasty-catalog'],
+    queryFn: () => knowledgeApi.getDynastyCatalog(),
+  })
 
   useEffect(() => {
     const stored = window.localStorage.getItem('wenxinlens-lang')
@@ -128,9 +195,10 @@ export default function HomePage() {
       lang === 'en'
         ? 'A modern AI-tech platform inspired by cultural heritage preservation, designed for students, travelers, and researchers.'
         : '以文化遗产保护为灵感的现代 AI 平台，面向学习者、旅行者与研究者。',
-    learnMore: lang === 'en' ? 'Learn More' : '了解更多',
     openFeature: lang === 'en' ? 'Open Feature' : '进入功能',
   }
+
+  const timelineCatalog = dynastyCatalog && dynastyCatalog.length > 0 ? dynastyCatalog : fallbackDynastyCatalog
 
   return (
     <div className="app-shell">
@@ -242,38 +310,65 @@ export default function HomePage() {
             </h2>
 
             <div className="grid-12">
-              {dynasties.map((item, idx) => (
-                <motion.article
-                  key={item.eraEn}
-                  className="col-span-12 md:col-span-6 xl:col-span-4 panel overflow-hidden hover-rise"
-                  initial={{ opacity: 0, y: 14 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: reduceMotion ? 0 : idx * 0.05, duration: reduceMotion ? 0.01 : 0.42 }}
-                >
-                  <div className="relative">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={item.image} alt={item.eraEn} className="w-full h-48 object-cover" />
-                    <div
-                      className="absolute inset-0"
-                      style={{ background: 'linear-gradient(180deg, rgba(11,15,26,0.05), rgba(11,15,26,0.72))' }}
-                    />
-                    <div className="absolute left-4 bottom-4 right-4">
-                      <p className="text-caption" style={{ color: '#00D1B2' }}>
-                        {item.eraEn} ({item.eraZh})
-                      </p>
-                    </div>
-                  </div>
-                  <div className="p-5">
-                    <p className="text-body">
-                      {lang === 'en' ? item.descriptionEn : item.descriptionZh}
-                    </p>
-                    <Link href="/knowledge" className="btn btn-secondary mt-5">
-                      {t.learnMore}
-                    </Link>
-                  </div>
-                </motion.article>
-              ))}
+              {timelineCatalog.map((item, idx) => {
+                const featured = item.places?.[0]
+                const subtitle = `${item.dynasty} (${item.dynasty_zh})`
+                const periodText = item.period
+                const image = featured?.image_url || '/images/hero-architecture.svg'
+                const description = featured?.description || (lang === 'en' ? 'No details yet.' : '暂无详情。')
+                const meta = [featured?.architecture_type, featured?.location, featured?.year_built].filter(Boolean).join(' · ')
+
+                return (
+                  <Link
+                    key={item.dynasty}
+                    href={`/knowledge/dynasty/${encodeURIComponent(item.dynasty)}`}
+                    className="col-span-12 md:col-span-6 xl:col-span-4 block"
+                    aria-label={`Open ${item.dynasty} details`}
+                  >
+                    <motion.article
+                      className="panel overflow-hidden hover-rise h-full"
+                      initial={{ opacity: 0, y: 14 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: reduceMotion ? 0 : idx * 0.05, duration: reduceMotion ? 0.01 : 0.42 }}
+                    >
+                      <div className="relative">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={image} alt={item.dynasty} className="w-full h-48 object-cover" />
+                        <div
+                          className="absolute inset-0"
+                          style={{ background: 'linear-gradient(180deg, rgba(11,15,26,0.05), rgba(11,15,26,0.72))' }}
+                        />
+                        <div className="absolute left-4 bottom-4 right-4">
+                          <p className="text-caption" style={{ color: '#00D1B2' }}>
+                            {subtitle}
+                          </p>
+                          <p className="text-caption mt-1" style={{ color: 'rgba(255,255,255,0.75)' }}>
+                            {periodText}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="p-5">
+                        <p className="text-body">
+                          {description}
+                        </p>
+                        {meta && (
+                          <p className="text-caption mt-3" style={{ color: 'rgba(255,255,255,0.72)' }}>
+                            {meta}
+                          </p>
+                        )}
+                        {featured?.details?.length > 0 && (
+                          <p className="text-caption mt-2" style={{ color: 'rgba(255,255,255,0.65)' }}>
+                            {featured.details[0]}
+                          </p>
+                        )}
+                        <p className="text-caption mt-2" style={{ color: 'rgba(0,209,178,0.85)' }}>
+                          {lang === 'en' ? `Featured place: ${featured?.name || 'Unknown'}` : `代表建筑：${featured?.name_zh || featured?.name || '未知'}`}
+                        </p>
+                      </div>
+                    </motion.article>
+                  </Link>
+                )})}
             </div>
           </div>
         </section>

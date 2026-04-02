@@ -63,7 +63,7 @@ export default function AdvancedLabPage() {
             <textarea className="surface-soft" style={{ padding: '12px', color: 'var(--text)', resize: 'vertical' }} rows={2} value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="Research question for historical persona" />
 
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
-              <select value={language} onChange={(e) => setLanguage(e.target.value as Language)} className="surface-soft" style={{ padding: '10px 12px', color: 'var(--text)' }}>
+              <select value={language} onChange={(e) => setLanguage(e.target.value as Language)} className="surface-soft wl-select" style={{ padding: '10px 12px', color: 'var(--text)' }}>
                 <option value="en">English</option>
                 <option value="zh">中文</option>
               </select>

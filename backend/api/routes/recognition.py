@@ -3,7 +3,6 @@ Architecture Recognition API
 POST /api/v1/recognition/analyze  — upload image, get recognition result
 GET  /api/v1/recognition/{id}     — retrieve previous result from cache
 """
-from __future__ import annotations
 
 import hashlib
 import io
@@ -65,7 +64,7 @@ def _validate_image(file: UploadFile) -> None:
 @limiter.limit("10/minute")
 async def analyze_image(
     request: Request,
-    image: Annotated[UploadFile, File(description="Architecture image (JPEG/PNG/WebP)")],
+    image: UploadFile = File(description="Architecture image (JPEG/PNG/WebP)"),
     language: str = "en",
     detail_level: str = "standard",
     current_user: dict = Depends(get_current_user),

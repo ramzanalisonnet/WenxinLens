@@ -1,8 +1,13 @@
+# NOTE: This pinned dependency set currently targets Python 3.11-3.12.
+# Python 3.13 may fail to install several transitive wheels (e.g. tokenizers/pydantic-core).
 # ─── Core Framework ───────────────────────────────────────────
-fastapi==0.109.2
+fastapi==0.109.2; python_version < "3.12"
+fastapi==0.135.2; python_version >= "3.12"
 uvicorn[standard]==0.27.1
-pydantic==2.6.1
-pydantic-settings==2.2.1
+pydantic==2.6.1; python_version < "3.12"
+pydantic==2.12.5; python_version >= "3.12"
+pydantic-settings==2.2.1; python_version < "3.12"
+pydantic-settings==2.13.1; python_version >= "3.12"
 python-multipart==0.0.9
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
@@ -33,7 +38,8 @@ numpy==1.26.4
 
 # ─── Vector Database ──────────────────────────────────────────
 pymilvus==2.3.6
-faiss-cpu==1.7.4
+faiss-cpu==1.7.4; python_version < "3.12"
+faiss-cpu==1.8.0; python_version >= "3.12"
 
 # ─── Graph Database ───────────────────────────────────────────
 neo4j==5.17.0
@@ -51,8 +57,8 @@ langchain-text-splitters==0.0.1
 
 # ─── Voice / TTS ──────────────────────────────────────────────
 azure-cognitiveservices-speech==1.35.0
-elevenlabs==0.3.0b0
-TTS==0.22.0
+# ElevenLabs is called via direct HTTP in services/tts_service.py, so SDK is optional.
+TTS==0.22.0; python_version < "3.12"
 
 # ─── Utilities ────────────────────────────────────────────────
 python-dotenv==1.0.1
@@ -63,7 +69,8 @@ slowapi==0.1.9
 sentry-sdk[fastapi]==1.40.6
 
 # ─── Data ─────────────────────────────────────────────────────
-pandas==2.2.0
+pandas==1.5.3; python_version < "3.12"
+pandas==2.2.0; python_version >= "3.12"
 datasets==2.17.1
 requests==2.31.0
 tqdm==4.66.2

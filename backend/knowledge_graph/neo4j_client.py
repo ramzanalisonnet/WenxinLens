@@ -31,6 +31,7 @@ from typing import Optional
 from loguru import logger
 
 from config import get_settings
+from knowledge_graph.dynasty_catalog import get_dynasty_catalog, get_places_by_dynasty
 
 settings = get_settings()
 
@@ -236,15 +237,53 @@ class Neo4jClient:
 
     def _get_by_dynasty_sync(self, dynasty: str) -> list[dict]:
         if not self._driver:
-            return []
+            return get_places_by_dynasty(dynasty)
         query = """
         MATCH (b:Building)-[:BUILT_IN]->(d:Dynasty)
+        OPTIONAL MATCH (b)-[:HAS_STYLE]->(s:Style)
         WHERE toLower(d.name) CONTAINS toLower($dynasty) OR d.id CONTAINS toLower($dynasty)
         RETURN b.id AS id, b.name AS name, b.name_zh AS name_zh,
-               d.name AS dynasty, b.location AS location, b.year_built AS year_built
+               d.name AS dynasty, b.location AS location, b.year_built AS year_built,
+               head(collect(DISTINCT s.name)) AS architecture_type,
+               b.description AS description
         """
         with self._driver.session() as session:
-            return session.run(query, dynasty=dynasty).data()  # type: ignore[arg-type]
+            rows = session.run(query, dynasty=dynasty).data()  # type: ignore[arg-type]
+
+        catalog_map = {
+            str(place.get("name", "")).lower(): place
+            for block in get_dynasty_catalog()
+            for place in block.get("places", [])
+        }
+
+        enriched: list[dict] = []
+        for row in rows:
+            name = str(row.get("name", "")).lower()
+            from_catalog = catalog_map.get(name, {})
+            enriched.append(
+                {
+                    "id": row.get("id") or from_catalog.get("id"),
+                    "name": row.get("name"),
+                    "name_zh": row.get("name_zh") or from_catalog.get("name_zh"),
+                    "dynasty": row.get("dynasty"),
+                    "location": row.get("location") or from_catalog.get("location"),
+                    "year_built": row.get("year_built") or from_catalog.get("year_built"),
+                    "architecture_type": row.get("architecture_type") or from_catalog.get("architecture_type"),
+                    "description": row.get("description") or from_catalog.get("description"),
+                    "image_url": from_catalog.get("image_url"),
+                    "coordinates": from_catalog.get("coordinates"),
+                    "details": from_catalog.get("details", []),
+                }
+            )
+        return enriched
+
+    async def get_dynasty_catalog(self) -> list[dict]:
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(None, self._get_dynasty_catalog_sync)
+
+    def _get_dynasty_catalog_sync(self) -> list[dict]:
+        # Source of truth for dynasty timeline cards and local development mode.
+        return get_dynasty_catalog()
 
     async def get_subgraph(self, building_name: str, depth: int = 2) -> dict:
         """Return nodes and edges for graph visualization."""

@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     app_secret_key: str = Field(default="dev-secret-key-change-in-production!!", min_length=16)
     app_debug: bool = False
     frontend_url: str = "http://localhost:3000"
+    fast_startup: bool = False
 
     # ── Server ─────────────────────────────────────────────────
     backend_host: str = "0.0.0.0"

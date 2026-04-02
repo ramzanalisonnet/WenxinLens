@@ -5,10 +5,13 @@ import type {
   ChatResponse,
   SiteInfo,
   BuildingKnowledge,
+  DynastyCatalogItem,
   AdvancedFeaturesResponse,
+  AvatarChatResponse,
+  AvatarLipSyncResponse,
 } from '@/types'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8010'
 
 const createApiClient = (): AxiosInstance => {
   const client = axios.create({
@@ -148,6 +151,11 @@ export const knowledgeApi = {
     const { data } = await api.get('/knowledge/dynasties')
     return data
   },
+
+  getDynastyCatalog: async (): Promise<DynastyCatalogItem[]> => {
+    const { data } = await api.get('/knowledge/dynasty-catalog')
+    return data
+  },
 }
 
 // ── Voice ────────────────────────────────────────────────────
@@ -194,6 +202,56 @@ export const advancedApi = {
   }): Promise<{ character: string; persona_name: string; reply: string }> => {
     const { data } = await api.post('/advanced/historical-character', payload)
     return data
+  },
+}
+
+// ── Avatar ───────────────────────────────────────────────────
+export const avatarApi = {
+  chat: async (payload: {
+    building_name: string
+    dynasty: string
+    character_type: string
+    message: string
+    language?: 'en' | 'zh'
+  }): Promise<AvatarChatResponse> => {
+    const { data } = await api.post<AvatarChatResponse>('/avatar/chat', payload)
+    return data
+  },
+
+  tts: async (payload: {
+    text: string
+    character_type: string
+    language?: 'en' | 'zh'
+  }): Promise<Blob> => {
+    const response = await api.post('/avatar/tts', payload, { responseType: 'blob' })
+    return response.data
+  },
+
+  stt: async (audioFile: Blob, language?: 'en' | 'zh'): Promise<{ text: string }> => {
+    const form = new FormData()
+    form.append('audio', audioFile, 'voice.webm')
+    const { data } = await api.post('/avatar/stt', form, {
+      params: language ? { language } : undefined,
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 120000,
+    })
+    return data
+  },
+
+  lipsync: async (payload: {
+    text: string
+    duration_ms?: number
+  }): Promise<AvatarLipSyncResponse> => {
+    const { data } = await api.post<AvatarLipSyncResponse>('/avatar/lipsync', payload)
+    return data
+  },
+
+  websocketUrl: () => {
+    const normalized = API_URL.replace(/\/$/, '')
+    const wsBase = normalized.startsWith('https://')
+      ? normalized.replace('https://', 'wss://')
+      : normalized.replace('http://', 'ws://')
+    return `${wsBase}/api/v1/avatar/ws`
   },
 }
 

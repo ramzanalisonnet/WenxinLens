@@ -262,6 +262,77 @@ img {
   pointer-events: none;
 }
 
+.wl-dynasty-pin {
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: #00d1b2;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 3px rgba(0, 209, 178, 0.2);
+}
+
+.wl-dynasty-pin span {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wl-dynasty-pin-active {
+  background: #ff4d4f;
+  box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.22);
+}
+
+.wl-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: linear-gradient(180deg, rgba(31, 41, 70, 0.96), rgba(28, 36, 63, 0.96));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23D7E0F2' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 14px 14px;
+  border: 2px solid rgba(0, 209, 178, 0.85);
+  box-shadow: 0 0 0 3px rgba(0, 209, 178, 0.16);
+  color: #f5f8ff;
+  border-radius: 10px;
+  padding-right: 2.2rem;
+}
+
+.wl-select:focus {
+  outline: 2px solid rgba(0, 209, 178, 0.65);
+  outline-offset: 1px;
+}
+
+.wl-select option {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.wl-select option:checked,
+.wl-select option[selected] {
+  background: #7a7a7a;
+  color: #ffffff;
+}
+
+.wl-map-popup .leaflet-popup-content-wrapper {
+  background: linear-gradient(180deg, #1d2745 0%, #17203a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f7faff;
+}
+
+.wl-map-popup .leaflet-popup-tip {
+  background: #17203a;
+}
+
+.wl-map-popup .leaflet-popup-close-button {
+  color: rgba(231, 239, 255, 0.82);
+}
+
+.wl-map-popup .leaflet-popup-content {
+  margin: 12px 14px;
+  line-height: 1.45;
+}
+
 .scan-line {
   position: absolute;
   left: 0;

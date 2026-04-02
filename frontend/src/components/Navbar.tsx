@@ -11,6 +11,7 @@ type Lang = 'en' | 'zh'
 const navItems = [
   { href: '/#features', en: 'Features', zh: '功能' },
   { href: '/#architecture', en: 'Architecture', zh: '建筑' },
+  { href: '/avatar', en: 'Avatar', zh: '数字人' },
   { href: '/lab', en: 'Advanced Lab', zh: '研究实验室' },
   { href: '/knowledge', en: 'Knowledge', zh: '知识' },
   { href: '/#about', en: 'About', zh: '关于' },
@@ -65,6 +66,7 @@ export function Navbar() {
           <div className="wl-nav-links" aria-label="Sections">
             {navItems.map((item) => {
               const active = (pathname.startsWith('/knowledge') && item.href === '/knowledge') ||
+                (pathname.startsWith('/avatar') && item.href === '/avatar') ||
                 (pathname.startsWith('/lab') && item.href === '/lab')
               return (
                 <Link

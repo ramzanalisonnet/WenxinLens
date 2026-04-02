@@ -4,7 +4,7 @@
 
 | Tool | Version | Notes |
 |------|---------|-------|
-| Python | 3.11+ | Use `pyenv` or `conda` |
+| Python | 3.11-3.12 | Use `pyenv` or `conda` (3.13 currently unsupported) |
 | Node.js | 20+ | Use `nvm` |
 | Docker | 24+ | For infrastructure |
 | Docker Compose | v2.20+ | Bundled with Docker Desktop |

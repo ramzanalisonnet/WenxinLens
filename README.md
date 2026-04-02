@@ -1,6 +1,6 @@
 # WenxinLens — AI Cultural Interpretation System for Chinese Ancient Architecture
 
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.11-3.12](https://img.shields.io/badge/python-3.11%20to%203.12-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-green.svg)](https://fastapi.tiangolo.com/)
 [![Next.js 14](https://img.shields.io/badge/Next.js-14+-black.svg)](https://nextjs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -91,7 +91,7 @@ wenxinlens/
 ### Prerequisites
 
 - Docker & Docker Compose v2+
-- Python 3.11+
+- Python 3.11 or 3.12 (Python 3.13 is not yet supported by several pinned ML dependencies)
 - Node.js 20+
 - NVIDIA GPU (optional, recommended for production)
 
@@ -189,6 +189,37 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 cd frontend && npm install
 npm run dev
 ```
+
+### Backend Smoke Tests
+
+Start the backend first (for example on port 8010), then run:
+
+```bash
+cd backend
+python -m pytest tests/test_api_smoke.py -q
+```
+
+Optional custom base URL:
+
+```bash
+WENXINLENS_BASE_URL=http://127.0.0.1:8010 python -m pytest tests/test_api_smoke.py -q
+```
+
+PowerShell:
+
+```powershell
+$env:WENXINLENS_BASE_URL='http://127.0.0.1:8010'; python -m pytest tests/test_api_smoke.py -q
+```
+
+If you only need API/smoke verification and want to skip heavy model and DB startup,
+enable fast startup mode in a separate terminal:
+
+```powershell
+$env:FAST_STARTUP='true'; uvicorn main:app --host 127.0.0.1 --port 8010
+```
+
+This mode keeps the server alive with degraded behavior for features that depend on
+vision/vector/graph backends, and is intended for local API contract checks.
 
 ---
 

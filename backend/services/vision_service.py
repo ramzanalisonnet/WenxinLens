@@ -11,14 +11,19 @@ Pipeline:
 from __future__ import annotations
 
 import asyncio
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
 
 import numpy as np
-import torch
 from loguru import logger
 from PIL import Image
+
+try:
+    import torch
+except ImportError:  # pragma: no cover - optional in lightweight/dev environments
+    torch = None
 
 from config import get_settings
 
@@ -163,9 +168,9 @@ class VisionService:
         self._model: Any = None             # CLIP model
         self._preprocess: Any = None        # CLIP preprocessor
         self._tokenizer: Any = None         # CLIP tokenizer
-        self._class_embeddings: Optional[torch.Tensor] = None
-        self._feature_embeddings: Optional[torch.Tensor] = None
-        self._device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self._class_embeddings: Any = None
+        self._feature_embeddings: Any = None
+        self._device = torch.device("cuda" if torch.cuda.is_available() else "cpu") if torch else "cpu"
         self._initialized = False
 
     async def initialize(self) -> None:
@@ -174,6 +179,16 @@ class VisionService:
         await loop.run_in_executor(None, self._load_models)
 
     def _load_models(self) -> None:
+        if os.getenv("WENXINLENS_SKIP_VISION_WARMUP", "").lower() in {"1", "true", "yes"}:
+            logger.warning("Skipping VisionService model warmup due to WENXINLENS_SKIP_VISION_WARMUP.")
+            self._initialized = False
+            return
+
+        if torch is None:
+            logger.warning("Torch is not installed; VisionService will run in mock mode.")
+            self._initialized = False
+            return
+
         try:
             import open_clip
             logger.info("Loading CLIP model …")
@@ -194,8 +209,9 @@ class VisionService:
             logger.warning(f"CLIP load failed (will use mock): {exc}")
             self._initialized = False
 
-    def _embed_class_texts(self) -> torch.Tensor:
+    def _embed_class_texts(self) -> Any:
         """Embed all class text prompts and average them per class."""
+        assert torch is not None
         embeddings = []
         with torch.no_grad():
             for cls in ARCHITECTURE_CLASSES:
@@ -205,8 +221,9 @@ class VisionService:
                 embeddings.append(feats.mean(dim=0))
         return torch.stack(embeddings)  # [n_classes, dim]
 
-    def _embed_feature_texts(self) -> torch.Tensor:
+    def _embed_feature_texts(self) -> Any:
         """Embed structural feature prompts."""
+        assert torch is not None
         with torch.no_grad():
             tokens = self._tokenizer(STRUCTURAL_FEATURE_PROMPTS).to(self._device)
             feats = self._model.encode_text(tokens)
@@ -221,6 +238,7 @@ class VisionService:
         if not self._initialized:
             return self._mock_prediction()
 
+        assert torch is not None
         with torch.no_grad():
             # Image encoding
             img_tensor = self._preprocess(image).unsqueeze(0).to(self._device)

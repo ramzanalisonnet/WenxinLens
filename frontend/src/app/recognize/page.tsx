@@ -118,11 +118,11 @@ export default function RecognizePage() {
                 <select
                   value={language}
                   onChange={(e) => setLanguage(e.target.value as Language)}
-                  className="bg-transparent text-sm text-white font-semibold focus:outline-none cursor-pointer"
+                  className="wl-select text-sm font-semibold cursor-pointer px-2 py-1"
                   aria-label="Choose language"
                 >
-                  <option value="en" style={{ background: '#0B0F1A' }}>English</option>
-                  <option value="zh" style={{ background: '#0B0F1A' }}>中文</option>
+                  <option value="en">English</option>
+                  <option value="zh">中文</option>
                 </select>
               </div>
 
@@ -135,12 +135,12 @@ export default function RecognizePage() {
                 <select
                   value={detailLevel}
                   onChange={(e) => setDetailLevel(e.target.value as DetailLevel)}
-                  className="bg-transparent text-sm text-white font-semibold focus:outline-none cursor-pointer"
+                  className="wl-select text-sm font-semibold cursor-pointer px-2 py-1"
                   aria-label="Choose detail level"
                 >
-                  <option value="tourist" style={{ background: '#0B0F1A' }}>Tourist</option>
-                  <option value="standard" style={{ background: '#0B0F1A' }}>Standard</option>
-                  <option value="academic" style={{ background: '#0B0F1A' }}>Academic</option>
+                  <option value="tourist">Tourist</option>
+                  <option value="standard">Standard</option>
+                  <option value="academic">Academic</option>
                 </select>
               </div>
             </div>

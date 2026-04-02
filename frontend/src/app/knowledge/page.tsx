@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
@@ -137,6 +138,14 @@ export default function KnowledgePage() {
           })}
         </motion.div>
 
+        {!query && dynasty !== 'All' && (
+          <div className="flex justify-end">
+            <Link href={`/knowledge/dynasty/${encodeURIComponent(dynasty)}`} className="btn btn-secondary">
+              Open {dynasty} Atlas
+            </Link>
+          </div>
+        )}
+
         {/* Loading */}
         {searching && (
           <div className="text-center py-16 text-white/30 text-sm">
@@ -187,6 +196,13 @@ export default function KnowledgePage() {
                       el.style.boxShadow = ''
                     }}
                   >
+                    {b.image_url && (
+                      <div className="rounded-xl overflow-hidden">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={b.image_url} alt={b.name_en ?? b.name} className="w-full h-36 object-cover" />
+                      </div>
+                    )}
+
                     {/* Dynasty badge */}
                     <div className="flex items-center justify-between">
                       {b.dynasty && (
@@ -212,6 +228,16 @@ export default function KnowledgePage() {
                     {/* Description */}
                     {b.description && (
                       <p className="text-white/50 text-xs leading-relaxed line-clamp-3">{b.description}</p>
+                    )}
+
+                    {(b.location || b.architecture_type || b.year_built) && (
+                      <p className="text-white/40 text-[11px] leading-relaxed">
+                        {[b.location, b.architecture_type, b.year_built].filter(Boolean).join(' · ')}
+                      </p>
+                    )}
+
+                    {Array.isArray(b.details) && b.details.length > 0 && (
+                      <p className="text-white/35 text-[11px] leading-relaxed line-clamp-2">{b.details[0]}</p>
                     )}
                   </motion.div>
                 )

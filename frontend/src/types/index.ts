@@ -71,6 +71,26 @@ export interface BuildingKnowledge {
   description_zh: string
 }
 
+export interface DynastyPlace {
+  id: string
+  name: string
+  name_zh: string
+  location: string
+  coordinates: { lat: number; lon: number } | null
+  architecture_type: string
+  year_built: string
+  image_url: string
+  description: string
+  details: string[]
+}
+
+export interface DynastyCatalogItem {
+  dynasty: string
+  dynasty_zh: string
+  period: string
+  places: DynastyPlace[]
+}
+
 export interface GraphNode {
   id: string
   label: string
@@ -146,6 +166,35 @@ export interface AdvancedFeaturesResponse {
   cross_civilization: CrossCivilizationData
   cinematic_story: CinematicStoryData
   summary: string
+}
+
+export type AvatarState = 'IDLE' | 'LISTENING' | 'THINKING' | 'SPEAKING'
+
+export interface AvatarMessage {
+  id: string
+  role: 'user' | 'assistant'
+  content: string
+  timestamp: string
+}
+
+export interface AvatarChatResponse {
+  character: string
+  persona_name: string
+  reply: string
+  tone: string
+  degraded?: boolean
+}
+
+export interface AvatarLipSyncCue {
+  start_ms: number
+  end_ms: number
+  viseme: string
+}
+
+export interface AvatarLipSyncResponse {
+  provider: string
+  duration_ms: number
+  visemes: AvatarLipSyncCue[]
 }
 
 export type Language = 'en' | 'zh'

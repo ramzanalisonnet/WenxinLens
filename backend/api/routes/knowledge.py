@@ -10,6 +10,10 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel
 
+from knowledge_graph.dynasty_catalog import (
+    get_dynasty_catalog as load_dynasty_catalog,
+    get_places_by_dynasty,
+)
 from middleware.auth import get_current_user
 
 router = APIRouter()
@@ -80,7 +84,9 @@ async def get_dynasty_buildings(
     current_user: dict = Depends(get_current_user),
 ) -> list[dict]:
     """List all buildings from a specific dynasty."""
-    neo4j = request.app.state.neo4j
+    neo4j = getattr(request.app.state, "neo4j", None)
+    if neo4j is None:
+        return get_places_by_dynasty(dynasty)
     buildings = await neo4j.get_buildings_by_dynasty(dynasty)
     return buildings
 
@@ -118,3 +124,14 @@ async def list_dynasties(
         {"id": "qing", "name": "Qing Dynasty", "name_zh": "清朝", "period": "1644–1912 CE"},
     ]
     return dynasties
+
+
+@router.get("/dynasty-catalog", summary="Dynasty architecture catalog with places")
+async def get_dynasty_catalog(
+    request: Request,
+    current_user: dict = Depends(get_current_user),
+) -> list[dict]:
+    neo4j = getattr(request.app.state, "neo4j", None)
+    if neo4j is None:
+        return load_dynasty_catalog()
+    return await neo4j.get_dynasty_catalog()

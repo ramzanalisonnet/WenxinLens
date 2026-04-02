@@ -77,14 +77,14 @@ class OrchestratorAgent:
             workflow.add_node("recognition", self._recognition.run)
             workflow.add_node("retrieval", self._retrieval.run)
             workflow.add_node("advanced_layer", self._run_advanced_layer)
-            workflow.add_node("explanation", self._explanation.run)
+            workflow.add_node("explanation_step", self._explanation.run)
 
             # Edges
             workflow.set_entry_point("recognition")
             workflow.add_edge("recognition", "retrieval")
             workflow.add_edge("retrieval", "advanced_layer")
-            workflow.add_edge("advanced_layer", "explanation")
-            workflow.add_edge("explanation", END)
+            workflow.add_edge("advanced_layer", "explanation_step")
+            workflow.add_edge("explanation_step", END)
 
             return workflow.compile()
         except ImportError:

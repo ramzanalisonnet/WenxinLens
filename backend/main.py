@@ -8,20 +8,25 @@ import time
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
-import sentry_sdk
 import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
 from loguru import logger
-from sentry_sdk.integrations.fastapi import FastApiIntegration
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 
+try:
+    import sentry_sdk
+    from sentry_sdk.integrations.fastapi import FastApiIntegration
+except ImportError:  # pragma: no cover - optional dependency in local/dev setups
+    sentry_sdk = None
+    FastApiIntegration = None
+
 from config import get_settings
-from api.routes import recognition, chat, tour, voice, knowledge, health, advanced
+from api.routes import recognition, chat, tour, voice, knowledge, health, advanced, avatar
 from middleware.auth import APIKeyMiddleware
 from middleware.logging import RequestLoggingMiddleware
 from middleware.rate_limiter import limiter
@@ -45,13 +50,15 @@ logger.add(
 )
 
 # ─── Sentry ───────────────────────────────────────────────────
-if settings.sentry_dsn:
+if settings.sentry_dsn and sentry_sdk and FastApiIntegration:
     sentry_sdk.init(
         dsn=settings.sentry_dsn,
         integrations=[FastApiIntegration(transaction_style="endpoint")],
         traces_sample_rate=0.2,
         environment=settings.app_env,
     )
+elif settings.sentry_dsn:
+    logger.warning("Sentry DSN is configured but sentry-sdk is not installed; continuing without Sentry.")
 
 
 # ─── Lifespan ─────────────────────────────────────────────────
@@ -60,35 +67,59 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     """Startup and shutdown lifecycle events."""
     logger.info("WenxinLens starting up …")
 
+    app.state.vision_service = None
+    app.state.vector_store = None
+    app.state.neo4j = None
+    app.state.retrieval_service = None
+
+    if settings.fast_startup:
+        logger.warning("Fast startup enabled: skipping heavy model/vector/graph initialization.")
+        logger.info("WenxinLens is ready  🏯")
+        yield
+        logger.info("WenxinLens shut down cleanly.")
+        return
+
     # Lazy imports to avoid circular deps
     from services.vision_service import VisionService
     from services.retrieval_service import RetrievalService
     from knowledge_graph.neo4j_client import Neo4jClient
     from rag.vector_store import VectorStore
 
-    # Warm up vision model
-    app.state.vision_service = VisionService()
-    await app.state.vision_service.initialize()
+    try:
+        # Warm up vision model
+        app.state.vision_service = VisionService()
+        await app.state.vision_service.initialize()
+    except Exception as exc:
+        logger.warning(f"Vision initialization failed, continuing in degraded mode: {exc}")
 
-    # Initialize vector store connection
-    app.state.vector_store = VectorStore()
-    await app.state.vector_store.initialize()
+    try:
+        # Initialize vector store connection
+        app.state.vector_store = VectorStore()
+        await app.state.vector_store.initialize()
+    except Exception as exc:
+        logger.warning(f"Vector store initialization failed, continuing in degraded mode: {exc}")
 
-    # Initialize graph DB
-    app.state.neo4j = Neo4jClient()
-    await app.state.neo4j.connect()
+    try:
+        # Initialize graph DB
+        app.state.neo4j = Neo4jClient()
+        await app.state.neo4j.connect()
+    except Exception as exc:
+        logger.warning(f"Neo4j initialization failed, continuing in degraded mode: {exc}")
 
-    # Initialize retrieval service
-    app.state.retrieval_service = RetrievalService(
-        vector_store=app.state.vector_store,
-        neo4j=app.state.neo4j,
-    )
+    if app.state.vector_store is not None and app.state.neo4j is not None:
+        app.state.retrieval_service = RetrievalService(
+            vector_store=app.state.vector_store,
+            neo4j=app.state.neo4j,
+        )
+    else:
+        logger.warning("Retrieval service disabled due to missing vector store or graph connection.")
 
     logger.info("WenxinLens is ready  🏯")
     yield
 
     # Cleanup
-    await app.state.neo4j.close()
+    if app.state.neo4j is not None:
+        await app.state.neo4j.close()
     logger.info("WenxinLens shut down cleanly.")
 
 
@@ -129,6 +160,7 @@ def create_app() -> FastAPI:
     app.include_router(voice.router, prefix="/api/v1/voice", tags=["Voice"])
     app.include_router(knowledge.router, prefix="/api/v1/knowledge", tags=["Knowledge"])
     app.include_router(advanced.router, prefix="/api/v1/advanced", tags=["Advanced Features"])
+    app.include_router(avatar.router, prefix="/api/v1/avatar", tags=["Avatar"])
 
     # ── Global exception handlers ──────────────────────────────
     @app.exception_handler(Exception)
