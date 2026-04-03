@@ -95,7 +95,8 @@ def build_detection_dataset(images_dir: Path, out_dir: Path, split: tuple[float,
         (det_out / split_name / "labels").mkdir(parents=True, exist_ok=True)
 
     # Write data.yaml
-    yaml_content = "path: .\ntrain: train/images\nval: val/images\ntest: test/images\n\nnc: {nc}\nnames: {names}\n".format(
+    yaml_content = "path: {path}\ntrain: train/images\nval: val/images\ntest: test/images\n\nnc: {nc}\nnames: {names}\n".format(
+        path=str(det_out.resolve()).replace('\\', '/'),
         nc=len(CLASS_NAMES),
         names=CLASS_NAMES,
     )

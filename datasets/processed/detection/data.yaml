@@ -1,0 +1,7 @@
+path: E:/Programming/WenxinLens/datasets/processed/detection
+train: train/images
+val: val/images
+test: test/images
+
+nc: 8
+names: ['Temple of Heaven', 'Forbidden City', 'Giant Wild Goose Pagoda', 'Summer Palace', 'Shaolin Temple', 'Zhaozhou Bridge', 'Yellow Crane Tower', 'Hakka Tulou']

@@ -25,6 +25,9 @@ def train(
     model_base: str,
     data_dir: Path,
     out_dir: Path,
+    device: str,
+    workers: int,
+    amp: bool,
 ) -> None:
     try:
         from ultralytics import YOLO  # type: ignore
@@ -39,6 +42,9 @@ def train(
             epochs=epochs,
             imgsz=img_size,
             batch=batch,
+            device=device,
+            workers=workers,
+            amp=amp,
             project=str(out_dir),
             name="wenxinlens_cls",
             pretrained=True,
@@ -57,6 +63,9 @@ def train(
             epochs=epochs,
             imgsz=img_size,
             batch=batch,
+            device=device,
+            workers=workers,
+            amp=amp,
             project=str(out_dir),
             name="wenxinlens_det",
             pretrained=True,
@@ -81,6 +90,9 @@ def main() -> None:
                         help="Pretrained model slug or .pt path (default: yolov8m-cls.pt, use yolov8m.pt for detect)")
     parser.add_argument("--data-dir",   default="datasets/processed")
     parser.add_argument("--out-dir",    default="training/runs")
+    parser.add_argument("--device",     default="cpu", help="Training device (cpu, cuda, 0, ...)")
+    parser.add_argument("--workers",    type=int, default=0, help="Data loader workers; 0 is safest on Windows CPU")
+    parser.add_argument("--amp",        action="store_true", help="Enable mixed precision (recommended only with CUDA)")
     args = parser.parse_args()
 
     train(
@@ -91,6 +103,9 @@ def main() -> None:
         model_base=args.model_base,
         data_dir=Path(args.data_dir),
         out_dir=Path(args.out_dir),
+        device=args.device,
+        workers=args.workers,
+        amp=args.amp,
     )
 
 

@@ -92,6 +92,7 @@ class Settings(BaseSettings):
     # ── Vision ────────────────────────────────────────────────
     yolo_model_path: str = "models/yolov8_architecture.pt"
     clip_model_name: str = "openai/clip-vit-large-patch14"
+    clip_checkpoint_path: str = ""
     vision_confidence_threshold: float = 0.7
     max_image_size_mb: int = 10
 

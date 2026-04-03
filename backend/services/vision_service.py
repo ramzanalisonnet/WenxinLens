@@ -26,6 +26,7 @@ except ImportError:  # pragma: no cover - optional in lightweight/dev environmen
     torch = None
 
 from config import get_settings
+from vision.detector import YOLODetector
 
 settings = get_settings()
 
@@ -170,13 +171,16 @@ class VisionService:
         self._tokenizer: Any = None         # CLIP tokenizer
         self._class_embeddings: Any = None
         self._feature_embeddings: Any = None
+        self._detector = YOLODetector()
         self._device = torch.device("cuda" if torch.cuda.is_available() else "cpu") if torch else "cpu"
         self._initialized = False
 
     async def initialize(self) -> None:
         """Warm up the model in a thread pool (non-blocking)."""
         loop = asyncio.get_running_loop()
-        await loop.run_in_executor(None, self._load_models)
+        clip_task = loop.run_in_executor(None, self._load_models)
+        detector_task = self._detector.initialize()
+        await asyncio.gather(clip_task, detector_task, return_exceptions=True)
 
     def _load_models(self) -> None:
         if os.getenv("WENXINLENS_SKIP_VISION_WARMUP", "").lower() in {"1", "true", "yes"}:
@@ -198,6 +202,16 @@ class VisionService:
                 model_name, pretrained=pretrained, device=self._device
             )
             self._tokenizer = open_clip.get_tokenizer(model_name)
+
+            if settings.clip_checkpoint_path:
+                checkpoint_path = Path(settings.clip_checkpoint_path)
+                if checkpoint_path.exists():
+                    state = torch.load(checkpoint_path, map_location=self._device)
+                    self._model.load_state_dict(state, strict=False)
+                    logger.info(f"Loaded CLIP checkpoint from {checkpoint_path}")
+                else:
+                    logger.warning(f"Configured CLIP_CHECKPOINT_PATH not found: {checkpoint_path}")
+
             self._model.eval()
 
             # Pre-compute class prototype embeddings
@@ -232,7 +246,36 @@ class VisionService:
     async def predict(self, image: Image.Image) -> VisionPrediction:
         """Run the full recognition pipeline asynchronously."""
         loop = asyncio.get_running_loop()
-        return await loop.run_in_executor(None, self._predict_sync, image)
+        try:
+            base = await loop.run_in_executor(None, self._predict_sync, image)
+        except Exception as exc:
+            logger.warning(f"CLIP prediction failed; returning mock: {exc}")
+            base = self._mock_prediction()
+
+        try:
+            detection = await self._detector.detect(image)
+        except Exception as exc:
+            logger.warning(f"YOLO detection failed; using CLIP-only output: {exc}")
+            return base
+
+        detector_features = [
+            cls.replace("_", " ")
+            for cls in (detection.detected_classes or [])
+        ]
+        if detector_features:
+            merged = []
+            for feat in detector_features + list(base.structural_features):
+                if feat not in merged:
+                    merged.append(feat)
+            base.structural_features = merged[:6]
+
+            if base.confidence_score < 0.92 and detection.detection_confidence > 0:
+                base.confidence_score = min(
+                    0.98,
+                    max(base.confidence_score, 0.75 * base.confidence_score + 0.25 * detection.detection_confidence),
+                )
+
+        return base
 
     def _predict_sync(self, image: Image.Image) -> VisionPrediction:
         if not self._initialized:

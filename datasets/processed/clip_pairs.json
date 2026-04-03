@@ -1,0 +1,837 @@
+[
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-1097528446-612x612.jpg",
+    "caption": "Chinese imperial palace with traditional hip and gable roofs, red columns and intricate dougong brackets",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-1131805549-612x612.jpg",
+    "caption": "Palace Museum Beijing, UNESCO world heritage site, vast courtyard encircled by walls",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-1135700168-612x612.jpg",
+    "caption": "Palace Museum Beijing, UNESCO world heritage site, vast courtyard encircled by walls",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-1159231005-612x612.jpg",
+    "caption": "Palace Museum Beijing, UNESCO world heritage site, vast courtyard encircled by walls",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-1175608991-612x612.jpg",
+    "caption": "Palace Museum Beijing, UNESCO world heritage site, vast courtyard encircled by walls",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-1264306677-612x612.jpg",
+    "caption": "Chinese imperial palace with traditional hip and gable roofs, red columns and intricate dougong brackets",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-1353276862-612x612.jpg",
+    "caption": "Chinese imperial palace with traditional hip and gable roofs, red columns and intricate dougong brackets",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-1368691140-612x612.jpg",
+    "caption": "The Forbidden City, an imperial palace complex with yellow glazed tile roofs and red walls in Beijing",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-1452848821-612x612.jpg",
+    "caption": "Palace Museum Beijing, UNESCO world heritage site, vast courtyard encircled by walls",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-1466833764-612x612.jpg",
+    "caption": "Palace Museum Beijing, UNESCO world heritage site, vast courtyard encircled by walls",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-1656129270-612x612.jpg",
+    "caption": "Chinese imperial palace with traditional hip and gable roofs, red columns and intricate dougong brackets",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-2154573721-612x612.jpg",
+    "caption": "The Forbidden City, an imperial palace complex with yellow glazed tile roofs and red walls in Beijing",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-2160604623-612x612 (1).jpg",
+    "caption": "Chinese imperial palace with traditional hip and gable roofs, red columns and intricate dougong brackets",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-2160604623-612x612.jpg",
+    "caption": "Chinese imperial palace with traditional hip and gable roofs, red columns and intricate dougong brackets",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-2180118630-612x612.jpg",
+    "caption": "The Forbidden City, an imperial palace complex with yellow glazed tile roofs and red walls in Beijing",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-2192911039-612x612.jpg",
+    "caption": "Palace Museum Beijing, UNESCO world heritage site, vast courtyard encircled by walls",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-2193438985-612x612.jpg",
+    "caption": "Palace Museum Beijing, UNESCO world heritage site, vast courtyard encircled by walls",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-475285750-612x612.jpg",
+    "caption": "Chinese imperial palace with traditional hip and gable roofs, red columns and intricate dougong brackets",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-491990549-612x612.jpg",
+    "caption": "Chinese imperial palace with traditional hip and gable roofs, red columns and intricate dougong brackets",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-505071642-612x612.jpg",
+    "caption": "Chinese imperial palace with traditional hip and gable roofs, red columns and intricate dougong brackets",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-536511121-612x612.jpg",
+    "caption": "The Forbidden City, an imperial palace complex with yellow glazed tile roofs and red walls in Beijing",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-598818270-612x612.jpg",
+    "caption": "The Forbidden City, an imperial palace complex with yellow glazed tile roofs and red walls in Beijing",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-606231026-612x612.jpg",
+    "caption": "Chinese imperial palace with traditional hip and gable roofs, red columns and intricate dougong brackets",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-653978818-612x612.jpg",
+    "caption": "Palace Museum Beijing, UNESCO world heritage site, vast courtyard encircled by walls",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-675556760-612x612.jpg",
+    "caption": "Palace Museum Beijing, UNESCO world heritage site, vast courtyard encircled by walls",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-851356452-612x612.jpg",
+    "caption": "The Forbidden City, an imperial palace complex with yellow glazed tile roofs and red walls in Beijing",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-867034736-612x612.jpg",
+    "caption": "The Forbidden City, an imperial palace complex with yellow glazed tile roofs and red walls in Beijing",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Forbidden_City\\istockphoto-911944018-612x612.jpg",
+    "caption": "Palace Museum Beijing, UNESCO world heritage site, vast courtyard encircled by walls",
+    "class": "Forbidden City"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-157307152-612x612.jpg",
+    "caption": "The Giant Wild Goose Pagoda, a seven-storey Tang dynasty Buddhist pagoda in Xi'an",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-459852174-612x612.jpg",
+    "caption": "Goose pagoda Xi'an, limestone and brick, square-plan tiered tower",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-459852180-612x612.jpg",
+    "caption": "Ancient brick pagoda built to house Buddhist sutras brought from India by Xuanzang",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-459852202-612x612.jpg",
+    "caption": "The Giant Wild Goose Pagoda, a seven-storey Tang dynasty Buddhist pagoda in Xi'an",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-459852268-612x612.jpg",
+    "caption": "Ancient brick pagoda built to house Buddhist sutras brought from India by Xuanzang",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-466300875-612x612.jpg",
+    "caption": "The Giant Wild Goose Pagoda, a seven-storey Tang dynasty Buddhist pagoda in Xi'an",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-487143769-612x612.jpg",
+    "caption": "The Giant Wild Goose Pagoda, a seven-storey Tang dynasty Buddhist pagoda in Xi'an",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-509669824-612x612.jpg",
+    "caption": "Ancient brick pagoda built to house Buddhist sutras brought from India by Xuanzang",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-517661890-612x612.jpg",
+    "caption": "Ancient brick pagoda built to house Buddhist sutras brought from India by Xuanzang",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-540037680-612x612.jpg",
+    "caption": "The Giant Wild Goose Pagoda, a seven-storey Tang dynasty Buddhist pagoda in Xi'an",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-540037720-612x612.jpg",
+    "caption": "Ancient brick pagoda built to house Buddhist sutras brought from India by Xuanzang",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-657872938-612x612.jpg",
+    "caption": "Goose pagoda Xi'an, limestone and brick, square-plan tiered tower",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-657873014-612x612.jpg",
+    "caption": "Goose pagoda Xi'an, limestone and brick, square-plan tiered tower",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-657873030-612x612.jpg",
+    "caption": "Ancient brick pagoda built to house Buddhist sutras brought from India by Xuanzang",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-86461099-612x612.jpg",
+    "caption": "Goose pagoda Xi'an, limestone and brick, square-plan tiered tower",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-86461111-612x612.jpg",
+    "caption": "Goose pagoda Xi'an, limestone and brick, square-plan tiered tower",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-89735669-612x612.jpg",
+    "caption": "Goose pagoda Xi'an, limestone and brick, square-plan tiered tower",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-89735684-612x612.jpg",
+    "caption": "The Giant Wild Goose Pagoda, a seven-storey Tang dynasty Buddhist pagoda in Xi'an",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-89735689-612x612.jpg",
+    "caption": "Goose pagoda Xi'an, limestone and brick, square-plan tiered tower",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-89735693-612x612.jpg",
+    "caption": "Goose pagoda Xi'an, limestone and brick, square-plan tiered tower",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-89735697-612x612.jpg",
+    "caption": "Ancient brick pagoda built to house Buddhist sutras brought from India by Xuanzang",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-89735704-612x612.jpg",
+    "caption": "Goose pagoda Xi'an, limestone and brick, square-plan tiered tower",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-962663582-612x612.jpg",
+    "caption": "The Giant Wild Goose Pagoda, a seven-storey Tang dynasty Buddhist pagoda in Xi'an",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-98108211-612x612.jpg",
+    "caption": "The Giant Wild Goose Pagoda, a seven-storey Tang dynasty Buddhist pagoda in Xi'an",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Giant_Wild_Goose_Pagoda\\gettyimages-98128133-612x612.jpg",
+    "caption": "Ancient brick pagoda built to house Buddhist sutras brought from India by Xuanzang",
+    "class": "Giant Wild Goose Pagoda"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-1090765488-612x612.jpg",
+    "caption": "A Hakka Tulou, massive circular earthen communal dwelling in Fujian, China",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-1090765490-612x612.jpg",
+    "caption": "A Hakka Tulou, massive circular earthen communal dwelling in Fujian, China",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-1092706122-612x612.jpg",
+    "caption": "Tulou, a UNESCO world heritage fortified earthen house of southern Fujian",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-1092771254-612x612.jpg",
+    "caption": "Tulou, a UNESCO world heritage fortified earthen house of southern Fujian",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-1167020849-612x612.jpg",
+    "caption": "A Hakka Tulou, massive circular earthen communal dwelling in Fujian, China",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-154962424-612x612.jpg",
+    "caption": "Round earthen fortress walled village of the Hakka people, multi-storey rammed earth structure",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-155387981-612x612.jpg",
+    "caption": "Round earthen fortress walled village of the Hakka people, multi-storey rammed earth structure",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-171255363-612x612.jpg",
+    "caption": "Tulou, a UNESCO world heritage fortified earthen house of southern Fujian",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-183833309-612x612.jpg",
+    "caption": "A Hakka Tulou, massive circular earthen communal dwelling in Fujian, China",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-183851474-612x612.jpg",
+    "caption": "Tulou, a UNESCO world heritage fortified earthen house of southern Fujian",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-183858646-612x612.jpg",
+    "caption": "Round earthen fortress walled village of the Hakka people, multi-storey rammed earth structure",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-184122352-612x612.jpg",
+    "caption": "A Hakka Tulou, massive circular earthen communal dwelling in Fujian, China",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-184400743-612x612.jpg",
+    "caption": "Tulou, a UNESCO world heritage fortified earthen house of southern Fujian",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-184865859-612x612.jpg",
+    "caption": "Tulou, a UNESCO world heritage fortified earthen house of southern Fujian",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-187743536-612x612.jpg",
+    "caption": "Round earthen fortress walled village of the Hakka people, multi-storey rammed earth structure",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-462219263-612x612.jpg",
+    "caption": "Tulou, a UNESCO world heritage fortified earthen house of southern Fujian",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-462219353-612x612.jpg",
+    "caption": "Round earthen fortress walled village of the Hakka people, multi-storey rammed earth structure",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-468471886-612x612.jpg",
+    "caption": "Round earthen fortress walled village of the Hakka people, multi-storey rammed earth structure",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-480973483-612x612.jpg",
+    "caption": "A Hakka Tulou, massive circular earthen communal dwelling in Fujian, China",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-507211673-612x612.jpg",
+    "caption": "A Hakka Tulou, massive circular earthen communal dwelling in Fujian, China",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-611591682-612x612.jpg",
+    "caption": "Tulou, a UNESCO world heritage fortified earthen house of southern Fujian",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-611595322-612x612.jpg",
+    "caption": "Round earthen fortress walled village of the Hakka people, multi-storey rammed earth structure",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-611595566-612x612.jpg",
+    "caption": "Round earthen fortress walled village of the Hakka people, multi-storey rammed earth structure",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-657233262-612x612.jpg",
+    "caption": "A Hakka Tulou, massive circular earthen communal dwelling in Fujian, China",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-827164376-612x612.jpg",
+    "caption": "A Hakka Tulou, massive circular earthen communal dwelling in Fujian, China",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Hakka_Tulou\\istockphoto-847799576-612x612.jpg",
+    "caption": "Round earthen fortress walled village of the Hakka people, multi-storey rammed earth structure",
+    "class": "Hakka Tulou"
+  },
+  {
+    "image": "datasets\\raw\\images\\Shaolin_Temple\\OIP (1).jpg",
+    "caption": "A photograph of Shaolin Temple, Chinese ancient architecture",
+    "class": "Shaolin Temple"
+  },
+  {
+    "image": "datasets\\raw\\images\\Shaolin_Temple\\OIP (10).jpg",
+    "caption": "A photograph of Shaolin Temple, Chinese ancient architecture",
+    "class": "Shaolin Temple"
+  },
+  {
+    "image": "datasets\\raw\\images\\Shaolin_Temple\\OIP (2).jpg",
+    "caption": "A photograph of Shaolin Temple, Chinese ancient architecture",
+    "class": "Shaolin Temple"
+  },
+  {
+    "image": "datasets\\raw\\images\\Shaolin_Temple\\OIP (3).jpg",
+    "caption": "A photograph of Shaolin Temple, Chinese ancient architecture",
+    "class": "Shaolin Temple"
+  },
+  {
+    "image": "datasets\\raw\\images\\Shaolin_Temple\\OIP (4).jpg",
+    "caption": "A photograph of Shaolin Temple, Chinese ancient architecture",
+    "class": "Shaolin Temple"
+  },
+  {
+    "image": "datasets\\raw\\images\\Shaolin_Temple\\OIP (5).jpg",
+    "caption": "A photograph of Shaolin Temple, Chinese ancient architecture",
+    "class": "Shaolin Temple"
+  },
+  {
+    "image": "datasets\\raw\\images\\Shaolin_Temple\\OIP.jpg",
+    "caption": "A photograph of Shaolin Temple, Chinese ancient architecture",
+    "class": "Shaolin Temple"
+  },
+  {
+    "image": "datasets\\raw\\images\\Summer_Palace\\istockphoto-1049406930-612x612.jpg",
+    "caption": "The Summer Palace in Beijing, a Qing dynasty imperial garden with a marble boat on Kunming Lake",
+    "class": "Summer Palace"
+  },
+  {
+    "image": "datasets\\raw\\images\\Summer_Palace\\istockphoto-157562258-612x612.jpg",
+    "caption": "Yi He Yuan, summer retreat of the Qing emperors outside Beijing",
+    "class": "Summer Palace"
+  },
+  {
+    "image": "datasets\\raw\\images\\Summer_Palace\\OIP (1).jpg",
+    "caption": "The Summer Palace in Beijing, a Qing dynasty imperial garden with a marble boat on Kunming Lake",
+    "class": "Summer Palace"
+  },
+  {
+    "image": "datasets\\raw\\images\\Summer_Palace\\OIP (2).jpg",
+    "caption": "Yi He Yuan, summer retreat of the Qing emperors outside Beijing",
+    "class": "Summer Palace"
+  },
+  {
+    "image": "datasets\\raw\\images\\Summer_Palace\\OIP (3).jpg",
+    "caption": "The Summer Palace in Beijing, a Qing dynasty imperial garden with a marble boat on Kunming Lake",
+    "class": "Summer Palace"
+  },
+  {
+    "image": "datasets\\raw\\images\\Summer_Palace\\OIP (4).jpg",
+    "caption": "Classical Chinese garden palace with long covered corridor, pagodas and artificial hills",
+    "class": "Summer Palace"
+  },
+  {
+    "image": "datasets\\raw\\images\\Summer_Palace\\OIP (5).jpg",
+    "caption": "Yi He Yuan, summer retreat of the Qing emperors outside Beijing",
+    "class": "Summer Palace"
+  },
+  {
+    "image": "datasets\\raw\\images\\Summer_Palace\\OIP (6).jpg",
+    "caption": "Yi He Yuan, summer retreat of the Qing emperors outside Beijing",
+    "class": "Summer Palace"
+  },
+  {
+    "image": "datasets\\raw\\images\\Summer_Palace\\OIP (7).jpg",
+    "caption": "The Summer Palace in Beijing, a Qing dynasty imperial garden with a marble boat on Kunming Lake",
+    "class": "Summer Palace"
+  },
+  {
+    "image": "datasets\\raw\\images\\Summer_Palace\\OIP (8).jpg",
+    "caption": "Classical Chinese garden palace with long covered corridor, pagodas and artificial hills",
+    "class": "Summer Palace"
+  },
+  {
+    "image": "datasets\\raw\\images\\Summer_Palace\\OIP (9).jpg",
+    "caption": "The Summer Palace in Beijing, a Qing dynasty imperial garden with a marble boat on Kunming Lake",
+    "class": "Summer Palace"
+  },
+  {
+    "image": "datasets\\raw\\images\\Summer_Palace\\OIP.jpg",
+    "caption": "The Summer Palace in Beijing, a Qing dynasty imperial garden with a marble boat on Kunming Lake",
+    "class": "Summer Palace"
+  },
+  {
+    "image": "datasets\\raw\\images\\Summer_Palace\\W020230111557169899662.jpg",
+    "caption": "Classical Chinese garden palace with long covered corridor, pagodas and artificial hills",
+    "class": "Summer Palace"
+  },
+  {
+    "image": "datasets\\raw\\images\\Summer_Palace\\W020230111567252849777.jpg",
+    "caption": "Classical Chinese garden palace with long covered corridor, pagodas and artificial hills",
+    "class": "Summer Palace"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-1062968630-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-1150736924-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-1160551720-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-1201872301-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-1215137515-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-1303307868-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-1419499524-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-1440699370-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-1470280390-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-156478692-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-158368322-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-170039011-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-171581417-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-176649647-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-2153767784-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-2154863024-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-2177683866-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-2218734340-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-2218734583-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-479306338-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-488441348-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-488498510-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-500394490-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-509475518-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-522242161-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-579765892-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-607258310-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\istockphoto-853860124-612x612.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\temple-of-heaven-harty-wi-512.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\temple-of-heaven-in-beijing-300.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\temple-of-heaven-tian-tan-300.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Temple_of_Heaven\\temple-of-heaven300.jpg",
+    "caption": "A photograph of Temple Of Heaven, Chinese ancient architecture",
+    "class": "Temple Of Heaven"
+  },
+  {
+    "image": "datasets\\raw\\images\\Yellow_Crane_Tower\\OIP (1).jpg",
+    "caption": "A photograph of Yellow Crane Tower, Chinese ancient architecture",
+    "class": "Yellow Crane Tower"
+  },
+  {
+    "image": "datasets\\raw\\images\\Yellow_Crane_Tower\\OIP (2).jpg",
+    "caption": "A photograph of Yellow Crane Tower, Chinese ancient architecture",
+    "class": "Yellow Crane Tower"
+  },
+  {
+    "image": "datasets\\raw\\images\\Yellow_Crane_Tower\\OIP (24).jpg",
+    "caption": "A photograph of Yellow Crane Tower, Chinese ancient architecture",
+    "class": "Yellow Crane Tower"
+  },
+  {
+    "image": "datasets\\raw\\images\\Yellow_Crane_Tower\\OIP (3).jpg",
+    "caption": "A photograph of Yellow Crane Tower, Chinese ancient architecture",
+    "class": "Yellow Crane Tower"
+  },
+  {
+    "image": "datasets\\raw\\images\\Yellow_Crane_Tower\\OIP (4).jpg",
+    "caption": "A photograph of Yellow Crane Tower, Chinese ancient architecture",
+    "class": "Yellow Crane Tower"
+  },
+  {
+    "image": "datasets\\raw\\images\\Yellow_Crane_Tower\\OIP (5).jpg",
+    "caption": "A photograph of Yellow Crane Tower, Chinese ancient architecture",
+    "class": "Yellow Crane Tower"
+  },
+  {
+    "image": "datasets\\raw\\images\\Yellow_Crane_Tower\\OIP (6).jpg",
+    "caption": "A photograph of Yellow Crane Tower, Chinese ancient architecture",
+    "class": "Yellow Crane Tower"
+  },
+  {
+    "image": "datasets\\raw\\images\\Yellow_Crane_Tower\\OIP (7).jpg",
+    "caption": "A photograph of Yellow Crane Tower, Chinese ancient architecture",
+    "class": "Yellow Crane Tower"
+  },
+  {
+    "image": "datasets\\raw\\images\\Yellow_Crane_Tower\\OIP (8).jpg",
+    "caption": "A photograph of Yellow Crane Tower, Chinese ancient architecture",
+    "class": "Yellow Crane Tower"
+  },
+  {
+    "image": "datasets\\raw\\images\\Yellow_Crane_Tower\\OIP (9).jpg",
+    "caption": "A photograph of Yellow Crane Tower, Chinese ancient architecture",
+    "class": "Yellow Crane Tower"
+  },
+  {
+    "image": "datasets\\raw\\images\\Yellow_Crane_Tower\\OIP.jpg",
+    "caption": "A photograph of Yellow Crane Tower, Chinese ancient architecture",
+    "class": "Yellow Crane Tower"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (1).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (10).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (11).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (12).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (13).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (14).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (15).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (16).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (17).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (18).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (19).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (2).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (20).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (21).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (22).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (23).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (3).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (4).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (5).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (6).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (7).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (8).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP (9).jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  },
+  {
+    "image": "datasets\\raw\\images\\Zhaozhou_Bridge\\OIP.jpg",
+    "caption": "A photograph of Zhaozhou Bridge, Chinese ancient architecture",
+    "class": "Zhaozhou Bridge"
+  }
+]
