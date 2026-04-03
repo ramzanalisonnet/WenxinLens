@@ -17,7 +17,7 @@ DYNASTY_CATALOG: list[dict[str, Any]] = [
                 "coordinates": {"lat": 34.2186, "lon": 108.9642},
                 "architecture_type": "Buddhist Pagoda",
                 "year_built": "652",
-                "image_url": "/images/timeline-tang.svg",
+                "image_url": "/images/timeline-tang.jpg",
                 "description": "A Tang-era brick pagoda built to preserve Buddhist scriptures brought from India.",
                 "details": [
                     "Seven-story square plan",
@@ -33,7 +33,7 @@ DYNASTY_CATALOG: list[dict[str, Any]] = [
                 "coordinates": {"lat": 34.2936, "lon": 108.9803},
                 "architecture_type": "Imperial Palace Complex",
                 "year_built": "634",
-                "image_url": "/images/timeline-tang.svg",
+                "image_url": "/images/timeline-tang.jpg",
                 "description": "The political heart of Tang imperial rule and a benchmark for East Asian palace planning.",
                 "details": [
                     "Grand axial composition",
@@ -56,7 +56,7 @@ DYNASTY_CATALOG: list[dict[str, Any]] = [
                 "coordinates": {"lat": 39.5651, "lon": 113.1903},
                 "architecture_type": "Timber Pagoda",
                 "year_built": "1056",
-                "image_url": "/images/timeline-song.svg",
+                "image_url": "/images/timeline-song.jpg",
                 "description": "The tallest surviving ancient wooden pagoda, showcasing advanced Song timber engineering.",
                 "details": [
                     "Pure timber frame system",
@@ -72,7 +72,7 @@ DYNASTY_CATALOG: list[dict[str, Any]] = [
                 "coordinates": {"lat": 30.2083, "lon": 120.1482},
                 "architecture_type": "Pagoda and Flood-control Landmark",
                 "year_built": "970",
-                "image_url": "/images/timeline-song.svg",
+                "image_url": "/images/timeline-song.jpg",
                 "description": "A pagoda overlooking the Qiantang River, blending practical signaling use and Buddhist symbolism.",
                 "details": [
                     "Brick-wood hybrid structure",
@@ -95,7 +95,7 @@ DYNASTY_CATALOG: list[dict[str, Any]] = [
                 "coordinates": {"lat": 39.9271, "lon": 116.3738},
                 "architecture_type": "Lamaist Stupa",
                 "year_built": "1271",
-                "image_url": "/images/timeline-yuan.svg",
+                "image_url": "/images/timeline-yuan.jpg",
                 "description": "A landmark Yuan monument reflecting Tibetan Buddhist architectural influence in Dadu.",
                 "details": [
                     "Nepal-Tibetan stylistic fusion",
@@ -111,7 +111,7 @@ DYNASTY_CATALOG: list[dict[str, Any]] = [
                 "coordinates": {"lat": 39.9424, "lon": 116.3939},
                 "architecture_type": "Timekeeping Civic Tower",
                 "year_built": "1272",
-                "image_url": "/images/timeline-yuan.svg",
+                "image_url": "/images/timeline-yuan.jpg",
                 "description": "Originally built in Yuan Dadu, used with the Bell Tower to regulate urban time and order.",
                 "details": [
                     "High timber platform form",
@@ -134,7 +134,7 @@ DYNASTY_CATALOG: list[dict[str, Any]] = [
                 "coordinates": {"lat": 39.9163, "lon": 116.3972},
                 "architecture_type": "Imperial Palace Architecture",
                 "year_built": "1406",
-                "image_url": "/images/timeline-ming.svg",
+                "image_url": "/images/timeline-ming.jpg",
                 "description": "The largest surviving palace complex in China, representing mature Ming imperial planning.",
                 "details": [
                     "Strict axial symmetry",
@@ -150,7 +150,7 @@ DYNASTY_CATALOG: list[dict[str, Any]] = [
                 "coordinates": {"lat": 39.8822, "lon": 116.4065},
                 "architecture_type": "Imperial Ritual Complex",
                 "year_built": "1420",
-                "image_url": "/images/timeline-ming.svg",
+                "image_url": "/images/timeline-ming.jpg",
                 "description": "Ceremonial architecture for imperial Heaven worship with symbolic geometric planning.",
                 "details": [
                     "Circular-square cosmology symbolism",
@@ -173,7 +173,7 @@ DYNASTY_CATALOG: list[dict[str, Any]] = [
                 "coordinates": {"lat": 39.9996, "lon": 116.2755},
                 "architecture_type": "Imperial Garden Architecture",
                 "year_built": "1750",
-                "image_url": "/images/timeline-qing.svg",
+                "image_url": "/images/timeline-qing.jpg",
                 "description": "An imperial garden integrating Kunming Lake and Longevity Hill into a large symbolic landscape.",
                 "details": [
                     "Garden-city spatial composition",
@@ -189,7 +189,7 @@ DYNASTY_CATALOG: list[dict[str, Any]] = [
                 "coordinates": {"lat": 41.7958, "lon": 123.4455},
                 "architecture_type": "Early Qing Palace Complex",
                 "year_built": "1625",
-                "image_url": "/images/timeline-qing.svg",
+                "image_url": "/images/timeline-qing.jpg",
                 "description": "A key early Qing palace blending Manchu traditions with established Han palace typologies.",
                 "details": [
                     "Multi-ethnic decorative language",

@@ -75,6 +75,9 @@ class Settings(BaseSettings):
     qwen_model: str = "qwen2.5-72b-instruct"
     ollama_base_url: str = "http://localhost:11434"
     ollama_model: str = "qwen2.5:7b"
+    openrouter_fallback_models: str = "openai/gpt-4o-mini"
+    openrouter_site_url: str = "http://localhost:3000"
+    openrouter_app_name: str = "WenxinLens"
 
     @property
     def llm_provider(self) -> Literal["openai", "qwen", "ollama"]:

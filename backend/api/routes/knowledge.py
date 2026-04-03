@@ -19,6 +19,21 @@ from middleware.auth import get_current_user
 router = APIRouter()
 
 
+def _prefer_timeline_jpg(catalog: list[dict]) -> list[dict]:
+    """Normalize timeline image URLs to JPG assets when legacy SVG links are returned."""
+    for dynasty in catalog:
+        places = dynasty.get("places", [])
+        if not isinstance(places, list):
+            continue
+        for place in places:
+            if not isinstance(place, dict):
+                continue
+            image_url = place.get("image_url")
+            if isinstance(image_url, str) and image_url.startswith("/images/timeline-") and image_url.endswith(".svg"):
+                place["image_url"] = image_url[:-4] + ".jpg"
+    return catalog
+
+
 class BuildingKnowledge(BaseModel):
     building_id: str
     name: str
@@ -133,5 +148,5 @@ async def get_dynasty_catalog(
 ) -> list[dict]:
     neo4j = getattr(request.app.state, "neo4j", None)
     if neo4j is None:
-        return load_dynasty_catalog()
-    return await neo4j.get_dynasty_catalog()
+        return _prefer_timeline_jpg(load_dynasty_catalog())
+    return _prefer_timeline_jpg(await neo4j.get_dynasty_catalog())

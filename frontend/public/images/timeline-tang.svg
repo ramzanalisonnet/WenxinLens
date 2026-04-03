@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Tang dynasty architecture illustration">
-  <rect width="1200" height="800" fill="#11182B"/>
-  <rect x="140" y="500" width="920" height="180" rx="10" fill="#E6EAF2" opacity="0.14"/>
-  <rect x="240" y="420" width="720" height="64" rx="8" fill="#FF4D4F"/>
-  <rect x="330" y="340" width="540" height="56" rx="8" fill="#00D1B2"/>
-  <rect x="560" y="260" width="80" height="70" rx="8" fill="#E6EAF2" opacity="0.75"/>
-  <circle cx="1020" cy="170" r="90" fill="#FF4D4F" opacity="0.14"/>
-  <text x="60" y="760" font-family="Inter, sans-serif" font-size="42" fill="#E6EAF2">Tang Dynasty</text>
-</svg>

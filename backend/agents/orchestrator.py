@@ -115,6 +115,9 @@ class OrchestratorAgent:
         else:
             final_state = await self._run_sequential_analysis(initial_state)
 
+        if final_state.get("error"):
+            raise RuntimeError(str(final_state.get("error")))
+
         return self._build_recognition_result(final_state, result_id)
 
     async def chat(

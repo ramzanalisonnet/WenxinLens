@@ -23,6 +23,19 @@ settings = get_settings()
 router = APIRouter()
 
 
+async def _get_or_init_vision_service(request: Request) -> VisionService:
+    """Ensure a usable VisionService exists even when fast-startup skipped heavy init."""
+    existing = getattr(request.app.state, "vision_service", None)
+    if existing is not None:
+        return existing
+
+    # Lazily initialize once and cache in app state so recognition works in FAST_STARTUP mode.
+    vision_service = VisionService()
+    await vision_service.initialize()
+    request.app.state.vision_service = vision_service
+    return vision_service
+
+
 # ─── Schemas ──────────────────────────────────────────────────
 
 class RecognitionResult(BaseModel):
@@ -90,7 +103,7 @@ async def analyze_image(
         raise HTTPException(status_code=400, detail=f"Could not decode image: {exc}") from exc
 
     try:
-        vision_service: VisionService = request.app.state.vision_service
+        vision_service = await _get_or_init_vision_service(request)
         orchestrator = OrchestratorAgent(
             vision_service=vision_service,
             retrieval_service=request.app.state.retrieval_service,

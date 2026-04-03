@@ -108,8 +108,20 @@ class LLMService:
             yield response
 
     async def _openai_generate(self, messages: list[dict], temperature: float, max_tokens: int) -> str:
+        api_key = (settings.openai_api_key or "").strip()
+
+        # Support OpenRouter keys even when provider resolves to "openai".
+        if api_key.startswith("sk-or-v1"):
+            return await self._openrouter_generate(
+                api_key=api_key,
+                model=settings.openai_model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+            )
+
         from openai import AsyncOpenAI
-        client = AsyncOpenAI(api_key=settings.openai_api_key)
+        client = AsyncOpenAI(api_key=api_key)
         response = await client.chat.completions.create(
             model=settings.openai_model,
             messages=messages,  # type: ignore[arg-type]
@@ -121,8 +133,22 @@ class LLMService:
     async def _openai_stream(
         self, messages: list[dict], temperature: float, max_tokens: int
     ) -> AsyncIterator[str]:
+        api_key = (settings.openai_api_key or "").strip()
+
+        if api_key.startswith("sk-or-v1"):
+            # Keep streaming contract simple for OpenRouter fallback: emit one full chunk.
+            response = await self._openrouter_generate(
+                api_key=api_key,
+                model=settings.openai_model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+            )
+            yield response
+            return
+
         from openai import AsyncOpenAI
-        client = AsyncOpenAI(api_key=settings.openai_api_key)
+        client = AsyncOpenAI(api_key=api_key)
         stream = await client.chat.completions.create(
             model=settings.openai_model,
             messages=messages,  # type: ignore[arg-type]
@@ -136,10 +162,22 @@ class LLMService:
                 yield delta
 
     async def _qwen_generate(self, messages: list[dict], temperature: float, max_tokens: int) -> str:
+        api_key = (settings.dashscope_api_key or "").strip()
+
+        # Support OpenRouter-style keys transparently while keeping the same env variable.
+        if api_key.startswith("sk-or-v1"):
+            return await self._openrouter_generate(
+                api_key=api_key,
+                model=settings.qwen_model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+            )
+
         import dashscope  # type: ignore[import-untyped]
         from dashscope import Generation  # type: ignore[import-untyped]
 
-        dashscope.api_key = settings.dashscope_api_key
+        dashscope.api_key = api_key
         loop = asyncio.get_running_loop()
 
         def _call():
@@ -153,6 +191,77 @@ class LLMService:
             return response.output.choices[0].message.content  # type: ignore[union-attr]
 
         return await loop.run_in_executor(None, _call)  # type: ignore[return-value]
+
+    async def _openrouter_generate(
+        self,
+        api_key: str,
+        model: str,
+        messages: list[dict],
+        temperature: float,
+        max_tokens: int,
+    ) -> str:
+        import httpx
+
+        site_url = settings.openrouter_site_url
+        app_name = settings.openrouter_app_name
+
+        fallbacks_raw = settings.openrouter_fallback_models
+        fallback_models = [m.strip() for m in fallbacks_raw.split(",") if m.strip()]
+
+        model_chain: list[str] = [model]
+        model_chain.extend([m for m in fallback_models if m not in model_chain])
+
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": site_url,
+            "X-Title": app_name,
+        }
+
+        last_exc: Exception | None = None
+        for candidate_model in model_chain:
+            payload = {
+                "model": candidate_model,
+                "messages": messages,
+                "temperature": temperature,
+                "max_tokens": max_tokens,
+            }
+
+            try:
+                async with httpx.AsyncClient(timeout=120.0) as client:
+                    response = await client.post(
+                        "https://openrouter.ai/api/v1/chat/completions",
+                        json=payload,
+                        headers=headers,
+                    )
+                    response.raise_for_status()
+                    data = response.json()
+
+                content = (
+                    data.get("choices", [{}])[0]
+                    .get("message", {})
+                    .get("content", "")
+                )
+
+                if not content:
+                    raise RuntimeError(f"OpenRouter returned empty content: {data}")
+
+                if candidate_model != model:
+                    logger.warning(f"OpenRouter fallback model used: {candidate_model} (requested: {model})")
+                return str(content)
+            except httpx.HTTPStatusError as exc:
+                last_exc = exc
+                # Retry with fallback model for common model-selection/quota failures.
+                if exc.response is not None and exc.response.status_code in {400, 404, 429, 502, 503}:
+                    continue
+                raise
+            except Exception as exc:
+                last_exc = exc
+                continue
+
+        if last_exc:
+            raise last_exc
+        raise RuntimeError("OpenRouter request failed without specific error")
 
     async def _ollama_generate(self, messages: list[dict], temperature: float, max_tokens: int) -> str:
         import httpx

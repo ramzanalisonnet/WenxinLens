@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Song dynasty architecture illustration">
-  <rect width="1200" height="800" fill="#10192E"/>
-  <rect x="200" y="520" width="800" height="150" rx="10" fill="#E6EAF2" opacity="0.13"/>
-  <rect x="250" y="450" width="700" height="52" rx="8" fill="#00D1B2"/>
-  <rect x="330" y="385" width="540" height="44" rx="8" fill="#FF4D4F"/>
-  <rect x="560" y="300" width="80" height="78" rx="8" fill="#E6EAF2" opacity="0.72"/>
-  <circle cx="180" cy="180" r="82" fill="#00D1B2" opacity="0.14"/>
-  <text x="60" y="760" font-family="Inter, sans-serif" font-size="42" fill="#E6EAF2">Song Dynasty</text>
-</svg>

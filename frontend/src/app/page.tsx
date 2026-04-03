@@ -23,6 +23,14 @@ import type { DynastyCatalogItem } from '@/types'
 type Lang = 'en' | 'zh'
 type Theme = 'dark' | 'light'
 
+function preferTimelineJpg(imageUrl?: string): string {
+  if (!imageUrl) return '/images/hero-architecture.svg'
+  if (imageUrl.startsWith('/images/timeline-') && imageUrl.endsWith('.svg')) {
+    return `${imageUrl.slice(0, -4)}.jpg`
+  }
+  return imageUrl
+}
+
 const features = [
   {
     icon: Camera,
@@ -72,7 +80,7 @@ const fallbackDynastyCatalog: DynastyCatalogItem[] = [
         coordinates: null,
         architecture_type: 'Buddhist Pagoda',
         year_built: '652',
-        image_url: '/images/timeline-tang.svg',
+        image_url: '/images/timeline-tang.jpg',
         description: 'A Tang-era pagoda preserving scriptures and structural knowledge of masonry religious architecture.',
         details: [],
       },
@@ -91,7 +99,7 @@ const fallbackDynastyCatalog: DynastyCatalogItem[] = [
         coordinates: null,
         architecture_type: 'Timber Pagoda',
         year_built: '1056',
-        image_url: '/images/timeline-song.svg',
+        image_url: '/images/timeline-song.jpg',
         description: 'A Song landmark known for advanced timber structure and layered bracket engineering.',
         details: [],
       },
@@ -110,7 +118,7 @@ const fallbackDynastyCatalog: DynastyCatalogItem[] = [
         coordinates: null,
         architecture_type: 'Lamaist Stupa',
         year_built: '1271',
-        image_url: '/images/timeline-yuan.svg',
+        image_url: '/images/timeline-yuan.jpg',
         description: 'A Yuan-period monument showing cross-cultural religious architecture in the imperial capital.',
         details: [],
       },
@@ -129,7 +137,7 @@ const fallbackDynastyCatalog: DynastyCatalogItem[] = [
         coordinates: null,
         architecture_type: 'Imperial Palace Architecture',
         year_built: '1406',
-        image_url: '/images/timeline-ming.svg',
+        image_url: '/images/timeline-ming.jpg',
         description: 'A mature expression of Ming palace planning, ritual hierarchy, and timber-hall construction.',
         details: [],
       },
@@ -148,7 +156,7 @@ const fallbackDynastyCatalog: DynastyCatalogItem[] = [
         coordinates: null,
         architecture_type: 'Imperial Garden Architecture',
         year_built: '1750',
-        image_url: '/images/timeline-qing.svg',
+        image_url: '/images/timeline-qing.jpg',
         description: 'A Qing imperial garden where architecture, topography, and symbolic landscape are integrated.',
         details: [],
       },
@@ -217,8 +225,6 @@ export default function HomePage() {
   }
 
   const timelineCatalog = dynastyCatalog && dynastyCatalog.length > 0 ? dynastyCatalog : fallbackDynastyCatalog
-  const recognitionSectionImage = theme === 'light' ? '/images/section-recognition-light.svg' : '/images/section-recognition.svg'
-  const knowledgeSectionImage = theme === 'light' ? '/images/section-knowledge-light.svg' : '/images/section-knowledge.svg'
 
   return (
     <div className="app-shell">
@@ -334,7 +340,7 @@ export default function HomePage() {
                 const featured = item.places?.[0]
                 const subtitle = `${item.dynasty} (${item.dynasty_zh})`
                 const periodText = item.period
-                const image = featured?.image_url || '/images/hero-architecture.svg'
+                const image = preferTimelineJpg(featured?.image_url)
                 const description = featured?.description || (lang === 'en' ? 'No details yet.' : '暂无详情。')
                 const meta = [featured?.architecture_type, featured?.location, featured?.year_built].filter(Boolean).join(' · ')
 
@@ -393,77 +399,51 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="section-block" aria-labelledby="recognition-title">
+        <section id="about" className="section-block wl-about-section" aria-labelledby="about-title">
           <div className="container-1200">
-            <div className="grid-12 items-stretch">
-              <article className="col-span-12 lg:col-span-6 panel p-8 h-full flex flex-col justify-center feature-pair-copy">
-                <h2 id="recognition-title" className="title-section">
-                  AI Recognition (建筑识别)
-                </h2>
-                <p className="text-body mt-4">
-                  {lang === 'en'
-                    ? 'Capture a building image and get instant insights on dynasty, structure, and symbolic elements.'
-                    : '拍摄建筑图像后，即时获得朝代、结构与文化符号解析。'}
-                </p>
-                <Link href="/recognize" className="btn btn-primary mt-6">
-                  {lang === 'en' ? 'Try AI Recognition' : '体验建筑识别'}
-                </Link>
-              </article>
+            <article className="panel p-8 md:p-10 wl-about-panel">
+              <div className="wl-about-grid">
+                <div>
+                  <h2 id="about-title" className="title-section">{t.aboutTitle}</h2>
+                  <p className="text-body mt-4 max-w-3xl">{t.aboutBody}</p>
+                  <div className="wl-about-tags mt-6">
+                    <span className="wl-about-tag">AI Vision</span>
+                    <span className="wl-about-tag">Heritage Data</span>
+                    <span className="wl-about-tag">Cultural Storytelling</span>
+                  </div>
+                </div>
 
-              <div className="col-span-12 lg:col-span-6 h-full feature-pair-visual">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={recognitionSectionImage}
-                  alt="Temple of Heaven"
-                  className="card-image"
-                />
+                <div className="wl-about-highlights" aria-label="Platform highlights">
+                  <article className="wl-about-stat-card">
+                    <p className="wl-about-stat-value">5+</p>
+                    <p className="wl-about-stat-label">Core Dynasty Tracks</p>
+                  </article>
+                  <article className="wl-about-stat-card">
+                    <p className="wl-about-stat-value">24/7</p>
+                    <p className="wl-about-stat-label">Interactive AI Guide</p>
+                  </article>
+                  <article className="wl-about-stat-card">
+                    <p className="wl-about-stat-value">Vision + RAG</p>
+                    <p className="wl-about-stat-label">Recognition and Knowledge Layer</p>
+                  </article>
+                </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section-block" aria-labelledby="knowledge-title">
-          <div className="container-1200">
-            <div className="grid-12 items-stretch">
-              <div className="col-span-12 lg:col-span-6 order-2 lg:order-1 h-full feature-pair-visual">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={knowledgeSectionImage}
-                  alt="Ancient Chinese timber architecture"
-                  className="card-image"
-                />
-              </div>
-
-              <article className="col-span-12 lg:col-span-6 panel p-8 order-1 lg:order-2 h-full flex flex-col justify-center feature-pair-copy">
-                <h2 id="knowledge-title" className="title-section">
-                  Knowledge Base (知识库)
-                </h2>
-                <p className="text-body mt-4">
-                  {lang === 'en'
-                    ? 'Explore structured cultural data across dynasties, building typologies, and historical narratives.'
-                    : '探索跨朝代、建筑类型与历史叙事的结构化文化知识数据。'}
-                </p>
-                <Link href="/knowledge" className="btn btn-secondary mt-6">
-                  {lang === 'en' ? 'Open Knowledge Base' : '打开知识库'}
-                </Link>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        <section id="about" className="section-block" aria-labelledby="about-title">
-          <div className="container-1200">
-            <article className="panel p-8 md:p-10">
-              <h2 id="about-title" className="title-section">{t.aboutTitle}</h2>
-              <p className="text-body mt-4 max-w-3xl">{t.aboutBody}</p>
             </article>
           </div>
         </section>
       </main>
 
-      <footer className="section-block" style={{ paddingTop: '64px', paddingBottom: '48px' }}>
+      <footer className="wl-home-footer">
         <div className="container-1200">
-          <div className="panel p-8 wl-footer-panel">
+          <div className="panel p-8 md:p-10 wl-footer-panel wl-footer-redesign">
+            <div className="wl-footer-topbar">
+              <p className="wl-footer-top-copy">Built to make Chinese architectural heritage vivid, searchable, and explorable.</p>
+              <Link href="/recognize" className="wl-footer-cta">
+                {lang === 'en' ? 'Start Exploring' : '开始探索'}
+                <ArrowRight size={15} />
+              </Link>
+            </div>
+
             <div className="grid-12 wl-footer-grid">
               <div className="col-span-12 md:col-span-4 wl-footer-col wl-footer-col-brand">
                 <p className="title-card">WenxinLens</p>
