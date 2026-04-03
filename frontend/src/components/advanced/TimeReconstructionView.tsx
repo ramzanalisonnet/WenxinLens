@@ -1,5 +1,6 @@
 'use client'
 
+import ReactMarkdown from 'react-markdown'
 import type { TimeReconstructionData } from '@/types'
 
 interface Props {
@@ -23,7 +24,17 @@ export function TimeReconstructionView({ data }: Props) {
                 <span className="text-caption">Generated</span>
               </div>
               <p className="text-caption mt-2">Prompt: {snap.prompt}</p>
-              <p className="text-body mt-2">{snap.explanation}</p>
+              <div className="text-body mt-2" style={{ lineHeight: 1.75 }}>
+                <ReactMarkdown
+                  components={{
+                    p: ({ children }) => <p className="text-body" style={{ marginBottom: 8 }}>{children}</p>,
+                    ul: ({ children }) => <ul style={{ paddingLeft: 18, marginBottom: 8 }}>{children}</ul>,
+                    li: ({ children }) => <li className="text-body" style={{ marginBottom: 4 }}>{children}</li>,
+                  }}
+                >
+                  {snap.explanation}
+                </ReactMarkdown>
+              </div>
               <p className="text-caption mt-2">Image asset: {snap.image_url}</p>
             </article>
           ))}

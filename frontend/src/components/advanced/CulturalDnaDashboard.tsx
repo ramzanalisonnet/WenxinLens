@@ -1,5 +1,6 @@
 'use client'
 
+import ReactMarkdown from 'react-markdown'
 import type { CulturalDnaData } from '@/types'
 
 interface Props {
@@ -42,7 +43,19 @@ export function CulturalDnaDashboard({ data }: Props) {
             })}
           </div>
           <article className="surface-soft mt-4 p-4" style={{ borderRadius: '12px' }}>
-            <p className="text-body">{data.analysis}</p>
+            <div className="text-body" style={{ lineHeight: 1.75 }}>
+              <ReactMarkdown
+                components={{
+                  h4: ({ children }) => <h4 className="text-caption" style={{ marginTop: 12, marginBottom: 8, color: 'var(--highlight)' }}>{children}</h4>,
+                  p: ({ children }) => <p className="text-body" style={{ marginBottom: 10 }}>{children}</p>,
+                  ul: ({ children }) => <ul style={{ paddingLeft: 18, marginBottom: 10 }}>{children}</ul>,
+                  li: ({ children }) => <li className="text-body" style={{ marginBottom: 6 }}>{children}</li>,
+                  strong: ({ children }) => <strong style={{ color: 'var(--text)' }}>{children}</strong>,
+                }}
+              >
+                {data.analysis}
+              </ReactMarkdown>
+            </div>
           </article>
         </>
       )}

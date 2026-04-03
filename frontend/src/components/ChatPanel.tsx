@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { SendHorizontal, MessageCircle, Bot } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
 import { chatApi } from '@/services/api'
 import type { ChatMessage } from '@/types'
 
@@ -130,7 +131,20 @@ export function ChatPanel({ buildingContext, buildingName, language = 'en' }: Ch
                   color: 'rgba(255,255,255,0.75)',
                 }}
               >
-                {msg.content}
+                {msg.role === 'assistant' ? (
+                  <ReactMarkdown
+                    components={{
+                      p: ({ children }) => <p style={{ margin: '0 0 8px 0' }}>{children}</p>,
+                      ul: ({ children }) => <ul style={{ margin: '0 0 8px 0', paddingLeft: 16 }}>{children}</ul>,
+                      li: ({ children }) => <li style={{ marginBottom: 4 }}>{children}</li>,
+                      strong: ({ children }) => <strong style={{ color: '#fff' }}>{children}</strong>,
+                    }}
+                  >
+                    {msg.content}
+                  </ReactMarkdown>
+                ) : (
+                  msg.content
+                )}
               </div>
             </motion.div>
           ))}

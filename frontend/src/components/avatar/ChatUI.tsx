@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import type { AvatarMessage } from '@/types'
 
 interface ChatUIProps {
@@ -43,7 +44,22 @@ export function ChatUI({ messages, onSend, disabled = false }: ChatUIProps) {
                 border: '1px solid rgba(230, 234, 242, 0.16)',
               }}
             >
-              <p style={{ margin: 0, fontSize: 14 }}>{item.content}</p>
+              {item.role === 'assistant' ? (
+                <div style={{ fontSize: 14, lineHeight: 1.6 }}>
+                  <ReactMarkdown
+                    components={{
+                      p: ({ children }) => <p style={{ margin: '0 0 8px 0' }}>{children}</p>,
+                      ul: ({ children }) => <ul style={{ margin: '0 0 8px 0', paddingLeft: 16 }}>{children}</ul>,
+                      li: ({ children }) => <li style={{ marginBottom: 4 }}>{children}</li>,
+                      strong: ({ children }) => <strong style={{ color: 'var(--text)' }}>{children}</strong>,
+                    }}
+                  >
+                    {item.content}
+                  </ReactMarkdown>
+                </div>
+              ) : (
+                <p style={{ margin: 0, fontSize: 14 }}>{item.content}</p>
+              )}
             </div>
           </article>
         ))}

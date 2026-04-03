@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import { advancedApi } from '@/services/api'
 import type { HistoricalCharacterData, Language } from '@/types'
 
@@ -68,7 +69,18 @@ export function HistoricalCharacterChat({ seed, buildingName, dynasty, language 
 
       {reply && (
         <article className="surface-soft mt-4 p-4" style={{ borderRadius: '12px' }}>
-          <p className="text-body">{reply}</p>
+          <div className="text-body" style={{ lineHeight: 1.75 }}>
+            <ReactMarkdown
+              components={{
+                p: ({ children }) => <p className="text-body" style={{ marginBottom: 10 }}>{children}</p>,
+                ul: ({ children }) => <ul style={{ paddingLeft: 18, marginBottom: 10 }}>{children}</ul>,
+                li: ({ children }) => <li className="text-body" style={{ marginBottom: 6 }}>{children}</li>,
+                strong: ({ children }) => <strong style={{ color: 'var(--text)' }}>{children}</strong>,
+              }}
+            >
+              {reply}
+            </ReactMarkdown>
+          </div>
         </article>
       )}
 

@@ -1,5 +1,6 @@
 'use client'
 
+import ReactMarkdown from 'react-markdown'
 import type { CinematicStoryData } from '@/types'
 
 interface Props {
@@ -28,7 +29,19 @@ export function CinematicStoryMode({ data }: Props) {
           <article className="surface-soft mt-4 p-4" style={{ borderRadius: '12px' }}>
             <p className="text-caption">Narration Provider: {data.audio.provider}</p>
             <p className="text-caption">Audio Asset: {data.audio.audio_url}</p>
-            <p className="text-body mt-3" style={{ whiteSpace: 'pre-wrap' }}>{data.script}</p>
+            <div className="text-body mt-3" style={{ lineHeight: 1.75 }}>
+              <ReactMarkdown
+                components={{
+                  h4: ({ children }) => <h4 className="text-caption" style={{ marginTop: 12, marginBottom: 8, color: 'var(--highlight)' }}>{children}</h4>,
+                  p: ({ children }) => <p className="text-body" style={{ marginBottom: 8 }}>{children}</p>,
+                  ul: ({ children }) => <ul style={{ paddingLeft: 18, marginBottom: 8 }}>{children}</ul>,
+                  li: ({ children }) => <li className="text-body" style={{ marginBottom: 4 }}>{children}</li>,
+                  strong: ({ children }) => <strong style={{ color: 'var(--text)' }}>{children}</strong>,
+                }}
+              >
+                {data.script}
+              </ReactMarkdown>
+            </div>
           </article>
         </>
       )}
