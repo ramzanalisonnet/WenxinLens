@@ -24,9 +24,9 @@ type Lang = 'en' | 'zh'
 type Theme = 'dark' | 'light'
 
 function preferTimelineJpg(imageUrl?: string): string {
-  if (!imageUrl) return '/images/hero-architecture.svg'
+  if (!imageUrl) return '/images/wenxinlens.png'
   if (imageUrl.startsWith('/images/timeline-') && imageUrl.endsWith('.svg')) {
-    return `${imageUrl.slice(0, -4)}.jpg`
+    return `${imageUrl.slice(0, -4)}.png`
   }
   return imageUrl
 }
@@ -230,12 +230,12 @@ export default function HomePage() {
     <div className="app-shell">
       <Navbar />
 
-      <main>
-        <section className="section-block" aria-labelledby="hero-title">
+      <main className="wl-home-main">
+        <section className="section-block wl-home-hero" aria-labelledby="hero-title">
           <div className="container-1200 relative">
             <div className="grid-12 items-center">
               <motion.div
-                className="col-span-12 lg:col-span-7"
+                className="col-span-12 lg:col-span-7 wl-hero-copy"
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: reduceMotion ? 0.01 : 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -261,16 +261,16 @@ export default function HomePage() {
             </div>
 
             <motion.div
-              className="mt-8 lg:mt-0 lg:absolute lg:top-0 lg:right-0 w-full lg:w-[min(36vw,460px)]"
+              className="mt-8 lg:mt-0 lg:absolute lg:top-0 lg:right-0 w-full lg:w-[min(36vw,460px)] wl-hero-visual-wrap"
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: reduceMotion ? 0 : 0.08, duration: reduceMotion ? 0.01 : 0.55 }}
             >
-              <article className="panel p-4 md:p-5 subtle-shine">
+              <article className="panel p-4 md:p-5 subtle-shine wl-hero-visual">
                 <div className="relative rounded-xl overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/images/hero-architecture.svg"
+                    src="/images/wenxinlens.png"
                     alt="Chinese ancient architecture"
                     className="hero-image"
                   />
@@ -290,9 +290,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="features" className="section-block" aria-labelledby="features-title">
+        <section id="features" className="section-block wl-home-features" aria-labelledby="features-title">
           <div className="container-1200">
-            <div className="mb-10">
+            <div className="mb-10 wl-section-head">
               <h2 id="features-title" className="title-section">
                 {t.featuresTitle}
               </h2>
@@ -304,13 +304,13 @@ export default function HomePage() {
                 return (
                   <motion.article
                     key={item.href}
-                    className="col-span-12 md:col-span-6 panel p-6 hover-rise"
+                    className="col-span-12 md:col-span-6 panel p-6 hover-rise wl-feature-card"
                     initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: reduceMotion ? 0 : idx * 0.05, duration: reduceMotion ? 0.01 : 0.4 }}
                   >
-                    <div className="w-11 h-11 rounded-xl flex items-center justify-center"
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center wl-feature-icon"
                       style={{ background: 'rgba(255, 77, 79, 0.14)', border: '1px solid rgba(255, 77, 79, 0.32)' }}>
                       <Icon size={20} style={{ color: '#FF4D4F' }} />
                     </div>
@@ -329,9 +329,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="architecture" className="section-block" aria-labelledby="architecture-title">
+        <section id="architecture" className="section-block wl-home-timeline" aria-labelledby="architecture-title">
           <div className="container-1200">
-            <h2 id="architecture-title" className="title-section mb-10">
+            <h2 id="architecture-title" className="title-section mb-10 wl-section-head">
               {t.timelineTitle}
             </h2>
 
@@ -348,11 +348,11 @@ export default function HomePage() {
                   <Link
                     key={item.dynasty}
                     href={`/knowledge/dynasty/${encodeURIComponent(item.dynasty)}`}
-                    className="col-span-12 md:col-span-6 xl:col-span-4 block"
+                    className="col-span-12 md:col-span-6 xl:col-span-4 block wl-timeline-link"
                     aria-label={`Open ${item.dynasty} details`}
                   >
                     <motion.article
-                      className="panel overflow-hidden hover-rise h-full"
+                      className="panel overflow-hidden hover-rise h-full wl-timeline-card"
                       initial={{ opacity: 0, y: 14 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -360,7 +360,7 @@ export default function HomePage() {
                     >
                       <div className="relative">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={image} alt={item.dynasty} className="w-full h-48 object-cover" />
+                        <img src={image} alt={item.dynasty} className="w-full h-48 object-cover wl-timeline-image" />
                         <div
                           className="absolute inset-0"
                           style={{ background: 'linear-gradient(180deg, rgba(11,15,26,0.05), rgba(11,15,26,0.72))' }}

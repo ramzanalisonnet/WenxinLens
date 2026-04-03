@@ -71,13 +71,8 @@ wenxinlens/
 │   └── src/
 │       ├── app/            # App Router pages
 │       ├── components/     # React components
-│       ├── hooks/          # Custom React hooks
 │       ├── services/       # API client
 │       └── types/          # TypeScript types
-├── agents/                 # Standalone agent definitions
-├── rag/                    # RAG utilities
-├── vision/                 # Vision pipeline
-├── knowledge_graph/        # Graph database
 ├── datasets/               # Data collection & processing
 ├── training/               # Model training scripts
 ├── deployment/             # Docker, K8s, Nginx configs
@@ -107,13 +102,13 @@ cp .env.example .env
 ### 2. Start all services
 
 ```bash
-docker-compose up -d
+docker compose -f deployment/docker-compose.yml up -d
 ```
 
 ### 3. Initialize the knowledge base
 
 ```bash
-docker-compose exec backend python -m scripts.init_knowledge_base
+docker compose -f deployment/docker-compose.yml exec backend python -m rag.knowledge_base_init
 ```
 
 ### 4. Open the application

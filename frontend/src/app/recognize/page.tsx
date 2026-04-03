@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { Camera, Upload, Loader2, ZoomIn, Globe, BookOpen, Volume2, Wand2, MessageCircle } from 'lucide-react'
@@ -21,6 +21,36 @@ export default function RecognizePage() {
   const [detailLevel, setDetailLevel] = useState<DetailLevel>('standard')
   const [showChat, setShowChat] = useState(false)
   const [playingAudio, setPlayingAudio] = useState(false)
+  const [isAudioPaused, setIsAudioPaused] = useState(false)
+  const [narrationLoading, setNarrationLoading] = useState(false)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const narrationModeRef = useRef<'audio' | 'browser' | null>(null)
+
+  const speakWithBrowserTts = useCallback((text: string) => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return false
+
+    try {
+      window.speechSynthesis.cancel()
+      const utterance = new SpeechSynthesisUtterance(text)
+      utterance.lang = language === 'zh' ? 'zh-CN' : 'en-US'
+      utterance.rate = 1
+      utterance.onend = () => {
+        narrationModeRef.current = null
+        setPlayingAudio(false)
+        setIsAudioPaused(false)
+      }
+      utterance.onerror = () => {
+        narrationModeRef.current = null
+        setPlayingAudio(false)
+        setIsAudioPaused(false)
+      }
+      window.speechSynthesis.speak(utterance)
+      narrationModeRef.current = 'browser'
+      return true
+    } catch {
+      return false
+    }
+  }, [language])
 
   const onDrop = useCallback((files: File[]) => {
     const file = files[0]
@@ -56,16 +86,86 @@ export default function RecognizePage() {
 
   const handlePlayNarration = async () => {
     if (!result) return
+
+    if (playingAudio) {
+      if (narrationModeRef.current === 'audio' && audioRef.current) {
+        if (isAudioPaused) {
+          await audioRef.current.play()
+          setIsAudioPaused(false)
+        } else {
+          audioRef.current.pause()
+          setIsAudioPaused(true)
+        }
+        return
+      }
+
+      if (narrationModeRef.current === 'browser' && typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        if (isAudioPaused) {
+          window.speechSynthesis.resume()
+          setIsAudioPaused(false)
+        } else {
+          window.speechSynthesis.pause()
+          setIsAudioPaused(true)
+        }
+        return
+      }
+    }
+
+    setError(null)
+
+    const text = (language === 'zh' ? result.description_zh : result.description)?.trim()
+      || result.cultural_significance?.trim()
+      || result.building_name
+
+    if (!text) {
+      setError('No narration text available for this result.')
+      return
+    }
+
+    setNarrationLoading(true)
     setPlayingAudio(true)
+    setIsAudioPaused(false)
+
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current = null
+    }
+
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel()
+    }
+
     try {
-      const text = language === 'zh' ? result.description_zh : result.description
       const blob = await voiceApi.synthesize(text, language)
       const url = URL.createObjectURL(blob)
       const audio = new Audio(url)
-      audio.onended = () => setPlayingAudio(false)
+      audioRef.current = audio
+      narrationModeRef.current = 'audio'
+
+      audio.onended = () => {
+        URL.revokeObjectURL(url)
+        narrationModeRef.current = null
+        setPlayingAudio(false)
+        setIsAudioPaused(false)
+      }
+      audio.onerror = () => {
+        URL.revokeObjectURL(url)
+        narrationModeRef.current = null
+        setPlayingAudio(false)
+        setIsAudioPaused(false)
+      }
+
       await audio.play()
+      setNarrationLoading(false)
     } catch {
-      setPlayingAudio(false)
+      const fallbackStarted = speakWithBrowserTts(text)
+      if (!fallbackStarted) {
+        narrationModeRef.current = null
+        setError('Narration failed. Please verify audio permissions or TTS provider settings.')
+        setPlayingAudio(false)
+        setIsAudioPaused(false)
+      }
+      setNarrationLoading(false)
     }
   }
 
@@ -275,12 +375,12 @@ export default function RecognizePage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <button
                       onClick={handlePlayNarration}
-                      disabled={playingAudio}
+                      disabled={narrationLoading}
                       className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-50"
                       style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(230, 234, 242, 0.2)', color: 'var(--text)' }}
                     >
-                      <Volume2 size={16} className={playingAudio ? 'animate-pulse' : ''} style={{ color: playingAudio ? 'var(--highlight)' : undefined }} />
-                      {playingAudio ? 'Playing...' : 'Narrate'}
+                      <Volume2 size={16} className={playingAudio && !isAudioPaused ? 'animate-pulse' : ''} style={{ color: playingAudio ? 'var(--highlight)' : undefined }} />
+                      {narrationLoading ? 'Starting...' : playingAudio ? (isAudioPaused ? 'Resume' : 'Pause') : 'Play'}
                     </button>
                     <button
                       onClick={() => setShowChat((v) => !v)}

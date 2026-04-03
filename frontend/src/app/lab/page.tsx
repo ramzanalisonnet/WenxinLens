@@ -54,16 +54,21 @@ export default function AdvancedLabPage() {
 
           <div className="mt-6" style={{ display: 'grid', gap: '12px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
-              <input className="surface-soft" style={{ padding: '12px', color: 'var(--text)' }} value={buildingName} onChange={(e) => setBuildingName(e.target.value)} placeholder="Building Name" />
-              <input className="surface-soft" style={{ padding: '12px', color: 'var(--text)' }} value={dynasty} onChange={(e) => setDynasty(e.target.value)} placeholder="Dynasty" />
-              <input className="surface-soft" style={{ padding: '12px', color: 'var(--text)' }} value={style} onChange={(e) => setStyle(e.target.value)} placeholder="Architectural Style" />
+              <input className="ui-input" value={buildingName} onChange={(e) => setBuildingName(e.target.value)} placeholder="Building Name" />
+              <input className="ui-input" value={dynasty} onChange={(e) => setDynasty(e.target.value)} placeholder="Dynasty" />
+              <input className="ui-input" value={style} onChange={(e) => setStyle(e.target.value)} placeholder="Architectural Style" />
             </div>
 
-            <textarea className="surface-soft" style={{ padding: '12px', color: 'var(--text)', resize: 'vertical' }} rows={2} value={features} onChange={(e) => setFeatures(e.target.value)} placeholder="Structural features, comma separated" />
-            <textarea className="surface-soft" style={{ padding: '12px', color: 'var(--text)', resize: 'vertical' }} rows={2} value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="Research question for historical persona" />
+            <textarea className="ui-input" style={{ resize: 'vertical' }} rows={2} value={features} onChange={(e) => setFeatures(e.target.value)} placeholder="Structural features, comma separated" />
+            <textarea className="ui-input" style={{ resize: 'vertical' }} rows={2} value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="Research question for historical persona" />
 
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
-              <select value={language} onChange={(e) => setLanguage(e.target.value as Language)} className="surface-soft wl-select" style={{ padding: '10px 12px', color: 'var(--text)' }}>
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value as Language)}
+                className="surface-soft wl-select"
+                style={{ padding: '10px 2.2rem 10px 12px', color: 'var(--text)' }}
+              >
                 <option value="en">English</option>
                 <option value="zh">中文</option>
               </select>

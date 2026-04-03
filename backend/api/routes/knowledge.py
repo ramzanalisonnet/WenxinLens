@@ -19,6 +19,12 @@ from middleware.auth import get_current_user
 router = APIRouter()
 
 
+def _normalize_timeline_image_url(image_url: str | None) -> str | None:
+    if isinstance(image_url, str) and image_url.startswith("/images/timeline-") and image_url.endswith(".svg"):
+        return image_url[:-4] + ".jpg"
+    return image_url
+
+
 def _prefer_timeline_jpg(catalog: list[dict]) -> list[dict]:
     """Normalize timeline image URLs to JPG assets when legacy SVG links are returned."""
     for dynasty in catalog:
@@ -28,10 +34,101 @@ def _prefer_timeline_jpg(catalog: list[dict]) -> list[dict]:
         for place in places:
             if not isinstance(place, dict):
                 continue
-            image_url = place.get("image_url")
-            if isinstance(image_url, str) and image_url.startswith("/images/timeline-") and image_url.endswith(".svg"):
-                place["image_url"] = image_url[:-4] + ".jpg"
+            place["image_url"] = _normalize_timeline_image_url(place.get("image_url"))
     return catalog
+
+
+def _search_catalog_fallback(query: str, dynasty: str | None, limit: int) -> list[dict]:
+    needle = query.strip().lower()
+    if not needle:
+        return []
+
+    catalog = _prefer_timeline_jpg(load_dynasty_catalog())
+    results: list[dict] = []
+
+    for block in catalog:
+        full_dynasty = str(block.get("dynasty", ""))
+        short_dynasty = full_dynasty.replace(" Dynasty", "")
+
+        if dynasty and dynasty.lower() != "all":
+            d = dynasty.lower()
+            if d not in full_dynasty.lower() and d not in short_dynasty.lower():
+                continue
+
+        for place in block.get("places", []):
+            if not isinstance(place, dict):
+                continue
+
+            haystack = " ".join(
+                str(place.get(k, ""))
+                for k in ("name", "name_zh", "location", "architecture_type", "description", "year_built")
+            ).lower()
+
+            if needle not in haystack:
+                continue
+
+            results.append(
+                {
+                    "name": place.get("name", ""),
+                    "name_en": place.get("name", ""),
+                    "name_zh": place.get("name_zh", ""),
+                    "dynasty": short_dynasty,
+                    "style": place.get("architecture_type", ""),
+                    "architecture_type": place.get("architecture_type", ""),
+                    "location": place.get("location", ""),
+                    "year_built": place.get("year_built", ""),
+                    "image_url": _normalize_timeline_image_url(place.get("image_url")),
+                    "description": place.get("description", ""),
+                    "details": place.get("details", []),
+                }
+            )
+
+            if len(results) >= limit:
+                return results
+
+    return results
+
+
+def _find_catalog_place(building_name: str) -> tuple[dict | None, str]:
+    needle = building_name.strip().lower()
+    for block in _prefer_timeline_jpg(load_dynasty_catalog()):
+        full_dynasty = str(block.get("dynasty", ""))
+        short_dynasty = full_dynasty.replace(" Dynasty", "")
+        for place in block.get("places", []):
+            if not isinstance(place, dict):
+                continue
+            name = str(place.get("name", ""))
+            name_zh = str(place.get("name_zh", ""))
+            if needle in name.lower() or needle in name_zh.lower() or name.lower() in needle:
+                return place, short_dynasty
+    return None, ""
+
+
+def _building_fallback_from_catalog(building_name: str) -> BuildingKnowledge | None:
+    place, dynasty = _find_catalog_place(building_name)
+    if not place:
+        return None
+
+    details = place.get("details", [])
+    if not isinstance(details, list):
+        details = []
+
+    return BuildingKnowledge(
+        building_id=str(place.get("id", place.get("name", "unknown"))).lower().replace(" ", "_"),
+        name=str(place.get("name", building_name)),
+        name_zh=str(place.get("name_zh", place.get("name", building_name))),
+        dynasty=dynasty,
+        architect=None,
+        location=str(place.get("location", "")),
+        year_built=str(place.get("year_built", "")) or None,
+        architectural_style=str(place.get("architecture_type", "")),
+        materials=[],
+        symbolism=[],
+        historical_events=[],
+        related_buildings=[],
+        description=str(place.get("description", "")),
+        description_zh=str(place.get("description", "")),
+    )
 
 
 class BuildingKnowledge(BaseModel):
@@ -70,9 +167,22 @@ async def get_building_knowledge(
     current_user: dict = Depends(get_current_user),
 ) -> BuildingKnowledge:
     """Fetch comprehensive cultural knowledge for a building from the graph database."""
-    neo4j = request.app.state.neo4j
-    result = await neo4j.get_building(building_name)
+    neo4j = getattr(request.app.state, "neo4j", None)
+    if neo4j is None:
+        fallback = _building_fallback_from_catalog(building_name)
+        if fallback:
+            return fallback
+        raise HTTPException(status_code=404, detail=f"Building '{building_name}' not found in knowledge base")
+
+    try:
+        result = await neo4j.get_building(building_name)
+    except Exception:
+        result = None
+
     if not result:
+        fallback = _building_fallback_from_catalog(building_name)
+        if fallback:
+            return fallback
         raise HTTPException(status_code=404, detail=f"Building '{building_name}' not found in knowledge base")
     return result
 
@@ -87,9 +197,14 @@ async def search_knowledge(
     current_user: dict = Depends(get_current_user),
 ) -> list[dict]:
     """Semantic search across the knowledge base."""
-    retrieval = request.app.state.retrieval_service
-    results = await retrieval.search(query=q, filters={"dynasty": dynasty} if dynasty else {}, top_k=limit)
-    return results
+    retrieval = getattr(request.app.state, "retrieval_service", None)
+    if retrieval is None:
+        return _search_catalog_fallback(q, dynasty, limit)
+
+    try:
+        return await retrieval.search(query=q, filters={"dynasty": dynasty} if dynasty else {}, top_k=limit)
+    except Exception:
+        return _search_catalog_fallback(q, dynasty, limit)
 
 
 @router.get("/dynasty/{dynasty}", response_model=list[dict])
@@ -117,9 +232,19 @@ async def get_graph_relations(
     Return a subgraph centered on a building for interactive visualization.
     Traverses up to `depth` hops in Neo4j.
     """
-    neo4j = request.app.state.neo4j
-    graph = await neo4j.get_subgraph(building_name, depth=depth)
-    return graph
+    neo4j = getattr(request.app.state, "neo4j", None)
+    if neo4j is None:
+        return GraphResponse(nodes=[{"id": building_name, "label": "Building", "name": building_name}], edges=[])
+
+    try:
+        graph = await neo4j.get_subgraph(building_name, depth=depth)
+    except Exception:
+        graph = {"nodes": [], "edges": []}
+
+    if not graph.get("nodes"):
+        graph = {"nodes": [{"id": building_name, "label": "Building", "name": building_name}], "edges": []}
+
+    return GraphResponse(nodes=graph.get("nodes", []), edges=graph.get("edges", []))
 
 
 @router.get("/dynasties", summary="List all dynasties in the knowledge base")

@@ -5,7 +5,10 @@ GET  /api/v1/voice/voices     — list available voices
 """
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException
+import io
+import wave
+
+from fastapi import APIRouter, Depends
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
@@ -24,6 +27,18 @@ def _get_tts() -> TTSService:
     if _tts_service is None:
         _tts_service = TTSService()
     return _tts_service
+
+
+def _generate_silent_wav(duration_seconds: float = 0.8, sample_rate: int = 16000) -> bytes:
+    """Generate a short silent WAV payload for degraded-mode fallback."""
+    frames = int(duration_seconds * sample_rate)
+    with io.BytesIO() as buf:
+        with wave.open(buf, "wb") as wav:
+            wav.setnchannels(1)
+            wav.setsampwidth(2)
+            wav.setframerate(sample_rate)
+            wav.writeframes(b"\x00\x00" * frames)
+        return buf.getvalue()
 
 
 class SynthesizeRequest(BaseModel):
@@ -63,7 +78,16 @@ async def synthesize_speech(
             headers={"Content-Disposition": "attachment; filename=narration.mp3"},
         )
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"TTS synthesis failed: {exc}") from exc
+        fallback_audio = _generate_silent_wav()
+        return Response(
+            content=fallback_audio,
+            media_type="audio/wav",
+            headers={
+                "Content-Disposition": "attachment; filename=narration-fallback.wav",
+                "X-TTS-Degraded": "true",
+                "X-TTS-Reason": str(exc)[:180],
+            },
+        )
 
 
 @router.get("/voices", response_model=list[VoiceInfo])

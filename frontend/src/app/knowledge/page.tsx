@@ -37,7 +37,26 @@ export default function KnowledgePage() {
     enabled:  dynasty !== 'All',
   })
 
-  const buildings = query.length > 1 ? searchResults : dynastyBuildings
+  const { data: dynastyCatalog } = useQuery({
+    queryKey: ['kg-dynasty-catalog'],
+    queryFn: () => knowledgeApi.getDynastyCatalog(),
+  })
+
+  const allBuildings = dynastyCatalog?.flatMap((block: any) => {
+    const shortDynasty = String(block?.dynasty || '').replace(' Dynasty', '')
+    return (block?.places || []).map((place: any) => ({
+      ...place,
+      dynasty: shortDynasty,
+      name_en: place?.name,
+      style: place?.architecture_type,
+    }))
+  })
+
+  const buildings = query.length > 1
+    ? searchResults
+    : dynasty === 'All'
+      ? allBuildings
+      : dynastyBuildings
   const activeDynastyStyle = dynastyAccents[dynasty] ?? dynastyAccents.All
 
   return (
@@ -90,14 +109,7 @@ export default function KnowledgePage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search buildings, dynasties, styles…"
-            className="w-full rounded-2xl pl-11 pr-4 py-3.5 text-sm outline-none transition-all"
-            style={{
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.12)',
-              color: 'rgba(255,255,255,0.85)',
-            }}
-            onFocus={e => (e.currentTarget as HTMLElement).style.borderColor = 'rgba(212,172,13,0.3)'}
-            onBlur={e  => (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'}
+            className="w-full rounded-2xl pl-11 pr-4 py-3.5 text-sm outline-none transition-all ui-input"
           />
           {query && (
             <button
@@ -257,7 +269,7 @@ export default function KnowledgePage() {
             </motion.div>
           )}
 
-          {!query && dynasty === 'All' && (
+          {!query && dynasty === 'All' && (!allBuildings || allBuildings.length === 0) && (
             <motion.div
               key="idle"
               initial={{ opacity: 0, y: 12 }}
