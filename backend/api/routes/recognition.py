@@ -114,6 +114,8 @@ async def analyze_image(
             result_id=result_id,
             language=language,
             detail_level=detail_level,
+            include_advanced=False,
+            fast_mode=True,
         )
         logger.info(
             f"Recognition [{result_id}]: {result.building_name} "

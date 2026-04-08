@@ -16,6 +16,8 @@ class AgentState(TypedDict, total=False):
     result_id: str
     language: str
     detail_level: str
+    include_advanced: bool
+    fast_mode: bool
     building_context: Optional[str]
 
     # Recognition output

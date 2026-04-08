@@ -77,6 +77,7 @@ class ExplanationAgent:
         advanced_summary = state.get("advanced_feature_summary", "")
         language = state.get("language", "en")
         detail_level = state.get("detail_level", "standard")
+        fast_mode = state.get("fast_mode", False)
 
         if advanced_summary:
             context = f"{context}\n\n[Advanced Feature Layer]\n{advanced_summary}" if context else advanced_summary
@@ -98,6 +99,29 @@ class ExplanationAgent:
                 language=language,
                 temperature=0.75,
             )
+
+            if fast_mode:
+                explanation_zh = (
+                    explanation if language == "zh" else f"{building_name_zh}的中文解读可在中文模式下获取。"
+                )
+                follow_ups = [
+                    f"Who built {building_name}?",
+                    f"What is the symbolic meaning of the roof design?",
+                    f"How was {building_name} used in ceremonies?",
+                ]
+                cultural_significance = (
+                    f"{building_name} reflects the ritual, technical, and symbolic values of its era."
+                    if language == "en"
+                    else f"{building_name_zh}体现了其时代的礼制、技术与象征价值。"
+                )
+                return {
+                    **state,
+                    "explanation": explanation,
+                    "explanation_zh": explanation_zh,
+                    "cultural_significance": cultural_significance,
+                    "follow_up_questions": follow_ups,
+                    "step": "explanation_complete",
+                }
 
             # Generate Chinese version if English was primary
             explanation_zh = ""

@@ -304,7 +304,7 @@ export default function HomePage() {
                 return (
                   <motion.article
                     key={item.href}
-                    className="col-span-12 md:col-span-6 panel p-6 hover-rise wl-feature-card"
+                    className="col-span-12 md:col-span-6 panel p-6 hover-rise wl-feature-card wl-feature-col"
                     initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -348,7 +348,7 @@ export default function HomePage() {
                   <Link
                     key={item.dynasty}
                     href={`/knowledge/dynasty/${encodeURIComponent(item.dynasty)}`}
-                    className="col-span-12 md:col-span-6 xl:col-span-4 block wl-timeline-link"
+                    className="col-span-12 md:col-span-6 xl:col-span-4 block wl-timeline-link wl-timeline-col"
                     aria-label={`Open ${item.dynasty} details`}
                   >
                     <motion.article

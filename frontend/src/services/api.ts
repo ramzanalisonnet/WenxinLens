@@ -1,5 +1,5 @@
 // API client for WenxinLens backend
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import type {
   RecognitionResult,
   ChatResponse,
@@ -31,7 +31,13 @@ const createApiClient = (): AxiosInstance => {
   client.interceptors.response.use(
     (response) => response,
     (error) => {
-      const message = error.response?.data?.detail || error.message || 'An error occurred'
+      const rawMessage = String(error?.message || '')
+      if (error?.code === 'ECONNABORTED' || /timeout/i.test(rawMessage)) {
+        return Promise.reject(
+          new Error('Recognition is taking longer than expected. Please try again or switch Detail to Tourist.')
+        )
+      }
+      const message = error.response?.data?.detail || rawMessage || 'An error occurred'
       return Promise.reject(new Error(message))
     }
   )
@@ -53,7 +59,7 @@ export const recognitionApi = {
     const { data } = await api.post<RecognitionResult>(
       `/recognition/analyze?language=${language}&detail_level=${detailLevel}`,
       form,
-      { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 90000 }
+      { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 180000 }
     )
     return data
   },

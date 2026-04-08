@@ -99,6 +99,8 @@ class OrchestratorAgent:
         result_id: str,
         language: str = "en",
         detail_level: str = "standard",
+        include_advanced: bool = False,
+        fast_mode: bool = True,
     ) -> "RecognitionResult":
         """Full analysis pipeline: image → cultural explanation."""
         from api.routes.recognition import RecognitionResult
@@ -107,6 +109,8 @@ class OrchestratorAgent:
             "result_id": result_id,
             "language": language,
             "detail_level": detail_level,
+            "include_advanced": include_advanced,
+            "fast_mode": fast_mode,
             "user_message": "",
         }
 
@@ -221,6 +225,12 @@ class OrchestratorAgent:
 
     async def _run_advanced_layer(self, state: AgentState) -> AgentState:
         """Run advanced feature agents concurrently and merge outputs."""
+        if state.get("include_advanced") is False:
+            merged: AgentState = {**state}
+            merged["advanced_feature_summary"] = ""
+            merged["step"] = "advanced_features_skipped"
+            return merged
+
         jobs = [
             self._time_reconstruction.run({**state}),
             self._historical_character.run({**state}),

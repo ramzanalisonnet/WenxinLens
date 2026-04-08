@@ -477,6 +477,16 @@ html[data-theme='light'] .btn-secondary:hover {
   gap: 20px;
 }
 
+.wl-feature-col {
+  grid-column: span 12 / span 12;
+}
+
+@media (min-width: 768px) {
+  .wl-feature-col {
+    grid-column: span 6 / span 6;
+  }
+}
+
 .wl-feature-card {
   position: relative;
   border-color: rgba(230, 234, 242, 0.2);
@@ -511,6 +521,22 @@ html[data-theme='light'] .btn-secondary:hover {
 
 .wl-home-timeline .grid-12 {
   gap: 20px;
+}
+
+.wl-timeline-col {
+  grid-column: span 12 / span 12;
+}
+
+@media (min-width: 768px) {
+  .wl-timeline-col {
+    grid-column: span 6 / span 6;
+  }
+}
+
+@media (min-width: 1280px) {
+  .wl-timeline-col {
+    grid-column: span 4 / span 4;
+  }
 }
 
 .wl-timeline-link {
