@@ -20,7 +20,7 @@ jobs:
           python-version: "3.11"
           cache: pip
       - name: Install test dependencies
-        run: python -m pip install --upgrade pip pytest pydantic-settings python-dotenv loguru pillow numpy
+        run: python -m pip install --upgrade pip pytest pydantic-settings python-dotenv loguru pillow numpy redis
       - name: Compile backend
         run: python -m compileall -q backend
       - name: Run focused regression tests
