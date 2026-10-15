@@ -232,7 +232,8 @@ class VisionService:
                 tokens = self._tokenizer(cls["clip_prompts"]).to(self._device)
                 feats = self._model.encode_text(tokens)
                 feats = feats / feats.norm(dim=-1, keepdim=True)
-                embeddings.append(feats.mean(dim=0))
+                mean_embedding = feats.mean(dim=0)
+                embeddings.append(mean_embedding / mean_embedding.norm().clamp_min(1e-12))
         return torch.stack(embeddings)  # [n_classes, dim]
 
     def _embed_feature_texts(self) -> Any:
@@ -269,7 +270,7 @@ class VisionService:
                     merged.append(feat)
             base.structural_features = merged[:6]
 
-            if base.confidence_score < 0.92 and detection.detection_confidence > 0:
+            if base.confidence_score > 0 and base.confidence_score < 0.92 and detection.detection_confidence > 0:
                 base.confidence_score = min(
                     0.98,
                     max(base.confidence_score, 0.75 * base.confidence_score + 0.25 * detection.detection_confidence),
@@ -328,21 +329,14 @@ class VisionService:
     @staticmethod
     def _mock_prediction() -> VisionPrediction:
         """Fallback mock when models are not available."""
+        # Never fabricate a high-confidence identity when the model is unavailable.
         return VisionPrediction(
-            building_name="Temple of Heaven",
-            building_name_zh="天坛",
-            architecture_style="Imperial Ceremonial Architecture",
-            dynasty="Ming Dynasty",
-            dynasty_zh="明朝",
-            confidence_score=0.87,
-            structural_features=[
-                "Circular three-tiered marble altar",
-                "Triple-eaved conical roof with blue tiles",
-                "Symmetrical ceremonial layout",
-            ],
-            top_k=[
-                {"name": "Temple of Heaven", "score": 0.87},
-                {"name": "Forbidden City", "score": 0.06},
-                {"name": "Summer Palace", "score": 0.04},
-            ],
+            building_name="Unknown architecture (vision model unavailable)",
+            building_name_zh="未知建筑（视觉模型不可用）",
+            architecture_style="Unknown",
+            dynasty="Unknown",
+            dynasty_zh="未知",
+            confidence_score=0.0,
+            structural_features=[],
+            top_k=[],
         )

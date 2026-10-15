@@ -28,6 +28,7 @@ MAX_HISTORY_MESSAGES = 20
 
 class SessionData(BaseModel):
     session_id: str
+    owner_sub: str | None = None
     language: str = "en"
     created_at: str
     updated_at: str
@@ -48,7 +49,9 @@ class ChatService:
 
         if self._redis is None:
             try:
-                self._redis = await aioredis.from_url(
+                # redis.asyncio.from_url is synchronous; only Redis operations
+                # such as ping/get/setex return awaitables.
+                self._redis = aioredis.from_url(
                     settings.redis_url,
                     password=settings.redis_password or None,
                     encoding="utf-8",
@@ -70,6 +73,7 @@ class ChatService:
         now = datetime.now(timezone.utc).isoformat()
         session = SessionData(
             session_id=session_id,
+            owner_sub=str(user.get("sub")) if user and user.get("sub") is not None else None,
             language=language,
             created_at=now,
             updated_at=now,

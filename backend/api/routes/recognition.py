@@ -58,13 +58,13 @@ class RecognitionResult(BaseModel):
 # ─── Helpers ──────────────────────────────────────────────────
 
 def _validate_image(file: UploadFile) -> None:
-    allowed_types = {"image/jpeg", "image/png", "image/webp", "image/heic"}
+    allowed_types = {"image/jpeg", "image/png", "image/webp"}
     if file.content_type not in allowed_types:
         raise HTTPException(
             status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-            detail=f"Unsupported image type: {file.content_type}. Allowed: JPEG, PNG, WebP, HEIC",
+            detail="Unsupported image media type. Allowed: JPEG, PNG, WebP.",
         )
-    if file.size and file.size > settings.max_image_size_mb * 1024 * 1024:
+    if file.size is not None and file.size > settings.max_image_size_mb * 1024 * 1024:
         raise HTTPException(
             status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
             detail=f"Image too large. Maximum size: {settings.max_image_size_mb} MB",
@@ -90,17 +90,35 @@ async def analyze_image(
     """
     _validate_image(image)
 
-    image_bytes = await image.read()
+    max_bytes = settings.max_image_size_mb * 1024 * 1024
+    # Bound the read even when Content-Length is absent or UploadFile.size is unknown.
+    image_bytes = await image.read(max_bytes + 1)
     if not image_bytes:
         raise HTTPException(status_code=400, detail="Empty image file")
+    if len(image_bytes) > max_bytes:
+        raise HTTPException(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            detail=f"Image too large. Maximum size: {settings.max_image_size_mb} MB",
+        )
 
-    # Compute deterministic result_id from image content
     result_id = hashlib.sha256(image_bytes).hexdigest()[:16]
-
     try:
-        pil_image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        with Image.open(io.BytesIO(image_bytes)) as probe:
+            if probe.format not in {"JPEG", "PNG", "WEBP"}:
+                raise HTTPException(status_code=415, detail="Image content must be JPEG, PNG, or WebP.")
+            if probe.width < 64 or probe.height < 64:
+                raise HTTPException(status_code=400, detail="Image dimensions must be at least 64 x 64 pixels.")
+            if probe.width * probe.height > 25_000_000:
+                raise HTTPException(status_code=413, detail="Image dimensions are too large.")
+            probe.verify()
+        with Image.open(io.BytesIO(image_bytes)) as decoded:
+            decoded.load()
+            pil_image = decoded.convert("RGB")
+    except HTTPException:
+        raise
     except Exception as exc:
-        raise HTTPException(status_code=400, detail=f"Could not decode image: {exc}") from exc
+        logger.warning(f"Rejected invalid image upload: {type(exc).__name__}")
+        raise HTTPException(status_code=400, detail="Could not decode the uploaded image.") from exc
 
     try:
         vision_service = await _get_or_init_vision_service(request)

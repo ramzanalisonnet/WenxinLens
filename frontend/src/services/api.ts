@@ -11,7 +11,7 @@ import type {
   AvatarLipSyncResponse,
 } from '@/types'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8010'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
 const createApiClient = (): AxiosInstance => {
   const client = axios.create({
@@ -57,9 +57,9 @@ export const recognitionApi = {
     const form = new FormData()
     form.append('image', imageFile)
     const { data } = await api.post<RecognitionResult>(
-      `/recognition/analyze?language=${language}&detail_level=${detailLevel}`,
+      '/recognition/analyze',
       form,
-      { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 180000 }
+      { params: { language, detail_level: detailLevel }, headers: { 'Content-Type': 'multipart/form-data' }, timeout: 180000 }
     )
     return data
   },
@@ -73,7 +73,7 @@ export const recognitionApi = {
 // ── Chat ─────────────────────────────────────────────────────
 export const chatApi = {
   createSession: async (language: string = 'en'): Promise<{ session_id: string }> => {
-    const { data } = await api.post(`/chat/session?language=${language}`)
+    const { data } = await api.post('/chat/session', null, { params: { language } })
     return data
   },
 

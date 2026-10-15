@@ -93,8 +93,8 @@ wenxinlens/
 ### 1. Clone and configure
 
 ```bash
-git clone https://github.com/yourorg/wenxinlens.git
-cd wenxinlens
+git clone https://github.com/ramzanalisonnet/WenxinLens.git
+cd WenxinLens
 cp .env.example .env
 # Edit .env with your API keys and secrets
 ```
@@ -214,7 +214,15 @@ $env:FAST_STARTUP='true'; uvicorn main:app --host 127.0.0.1 --port 8010
 ```
 
 This mode keeps the server alive with degraded behavior for features that depend on
-vision/vector/graph backends, and is intended for local API contract checks.
+vision/vector/graph backends, and is intended only for local API contract checks, not production.
+
+---
+
+## Security and Operations
+
+See [docs/operations.md](docs/operations.md) for production configuration, readiness checks, degraded-mode behavior, and remaining upgrade priorities.
+
+Before exposing this service publicly, review the framework dependency versions in `frontend/package.json`; the current Next.js 14.1.0 pin predates several subsequent security releases and must be upgraded to a patched supported version with its React/UI peer dependencies tested. The new Dependabot and CI workflows help keep dependency updates visible, but they do not automatically prove that a major framework migration is compatible.
 
 ---
 

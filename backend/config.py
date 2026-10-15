@@ -8,7 +8,7 @@ import os
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import AnyHttpUrl, Field, field_validator
+from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -97,7 +97,7 @@ class Settings(BaseSettings):
     clip_model_name: str = "openai/clip-vit-large-patch14"
     clip_checkpoint_path: str = ""
     vision_confidence_threshold: float = 0.7
-    max_image_size_mb: int = 10
+    max_image_size_mb: int = Field(default=10, ge=1, le=50)
 
     # ── TTS ───────────────────────────────────────────────────
     tts_provider: Literal["azure", "elevenlabs", "coqui"] = "azure"
@@ -107,7 +107,7 @@ class Settings(BaseSettings):
 
     # ── Auth ──────────────────────────────────────────────────
     jwt_secret_key: str = Field(default="dev-secret-key", min_length=8)
-    jwt_algorithm: str = "HS256"
+    jwt_algorithm: Literal["HS256"] = "HS256"
     jwt_expire_minutes: int = 1440
     master_api_key: str = "dev-master-key"
 
@@ -131,6 +131,36 @@ class Settings(BaseSettings):
     time_reconstruction_controlnet: str = "lllyasviel/control_v11p_sd15_canny"
     enable_gpu_diffusion: bool = False
     cinematic_tts_provider: str = "coqui"
+
+    @model_validator(mode="after")
+    def validate_production_secrets(self) -> "Settings":
+        """Reject known development credentials when deploying in production."""
+        if self.is_production:
+            required_secrets = {
+                "APP_SECRET_KEY": self.app_secret_key,
+                "JWT_SECRET_KEY": self.jwt_secret_key,
+                "MASTER_API_KEY": self.master_api_key,
+            }
+            required_secrets["REDIS_PASSWORD"] = self.redis_password
+            required_secrets["NEO4J_PASSWORD"] = self.neo4j_password
+            if self.app_debug:
+                raise ValueError("APP_DEBUG must be false in production")
+            if "*" in self.cors_origins:
+                raise ValueError("CORS_ORIGINS must not contain '*' when credentials are enabled")
+            if len(set(required_secrets.values())) != len(required_secrets):
+                raise ValueError("Production secrets must not reuse the same value")
+            for name, secret in required_secrets.items():
+                normalized = secret.strip().lower()
+                if (
+                    len(secret) < 32
+                    or any(marker in normalized for marker in ("change-me", "change_me", "dev-secret", "dev-master", "your-"))
+                ):
+                    raise ValueError(
+                        f"{name} must be replaced with a unique secret of at least 32 characters in production"
+                    )
+        if self.rag_chunk_overlap >= self.rag_chunk_size:
+            raise ValueError("RAG_CHUNK_OVERLAP must be smaller than RAG_CHUNK_SIZE")
+        return self
 
     @property
     def is_production(self) -> bool:

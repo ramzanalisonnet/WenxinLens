@@ -3,6 +3,7 @@ WenxinLens – FastAPI Application Entry Point
 """
 from __future__ import annotations
 
+import os
 import sys
 import time
 from contextlib import asynccontextmanager
@@ -34,6 +35,7 @@ from middleware.rate_limiter import limiter
 settings = get_settings()
 
 # ─── Logging ──────────────────────────────────────────────────
+os.makedirs("logs", exist_ok=True)
 logger.remove()
 logger.add(
     sys.stderr,
@@ -67,6 +69,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     """Startup and shutdown lifecycle events."""
     logger.info("WenxinLens starting up …")
 
+    app.state.fast_startup = settings.fast_startup
     app.state.vision_service = None
     app.state.vector_store = None
     app.state.neo4j = None
@@ -119,7 +122,10 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     # Cleanup
     if app.state.neo4j is not None:
-        await app.state.neo4j.close()
+        try:
+            await app.state.neo4j.close()
+        except Exception as exc:
+            logger.warning(f"Neo4j shutdown failed: {exc}")
     logger.info("WenxinLens shut down cleanly.")
 
 

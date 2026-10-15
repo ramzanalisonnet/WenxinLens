@@ -1,10 +1,12 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from loguru import logger
 from pydantic import BaseModel, Field
 
 from agents.orchestrator import OrchestratorAgent
+from middleware.auth import get_current_user
+from middleware.rate_limiter import limiter
 router = APIRouter()
 
 
@@ -37,9 +39,11 @@ def _get_orchestrator(request: Request) -> OrchestratorAgent:
 
 
 @router.post("/all")
+@limiter.limit("10/minute")
 async def run_all_features(
     body: AdvancedFeatureRequest,
     request: Request,
+    current_user: dict = Depends(get_current_user),
 ) -> dict:
     orchestrator = _get_orchestrator(request)
     try:
@@ -57,9 +61,11 @@ async def run_all_features(
 
 
 @router.post("/historical-character")
+@limiter.limit("20/minute")
 async def historical_character_chat(
     body: HistoricalCharacterRequest,
     request: Request,
+    current_user: dict = Depends(get_current_user),
 ) -> dict:
     try:
         orchestrator = _get_orchestrator(request)
