@@ -130,6 +130,8 @@ async def avatar_stt(
             raise HTTPException(status_code=413, detail="Audio upload exceeds the configured size limit.")
         text = await _avatar_service.transcribe_audio(payload, language=language)
         return {"text": text}
+    except HTTPException:
+        raise
     except Exception as exc:
         raise HTTPException(status_code=503, detail="Speech transcription is temporarily unavailable.") from exc
 
