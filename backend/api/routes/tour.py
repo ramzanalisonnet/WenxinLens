@@ -107,8 +107,8 @@ SITES_DB: list[dict] = [
 
 @router.get("/nearby", response_model=NearbyResponse)
 async def get_nearby_sites(
-    lat: float = Query(39.9163, description="Latitude"),
-    lon: float = Query(116.3972, description="Longitude"),
+    lat: float = Query(39.9163, ge=-90, le=90, description="Latitude"),
+    lon: float = Query(116.3972, ge=-180, le=180, description="Longitude"),
     radius_km: float = Query(10.0, ge=0.1, le=100.0),
     limit: int = Query(10, ge=1, le=50),
     dynasty: str | None = None,
@@ -180,11 +180,19 @@ async def get_site(
 
 @router.get("/route", response_model=TourRoute)
 async def plan_route(
-    sites: str = Query(..., description="Comma-separated site IDs"),
+    sites: str = Query(..., min_length=1, max_length=500, description="Comma-separated site IDs"),
     current_user: dict = Depends(get_current_user),
 ) -> TourRoute:
-    """Plan an optimised walking tour between selected sites."""
-    site_ids = [s.strip() for s in sites.split(",")]
+    """Create an illustrative itinerary, not live map routing or turn-by-turn navigation."""
+    site_ids = list(dict.fromkeys(s.strip() for s in sites.split(",") if s.strip()))
+    if not site_ids:
+        raise HTTPException(status_code=422, detail="Provide at least one site ID.")
+    if len(site_ids) > 20:
+        raise HTTPException(status_code=422, detail="A route can include at most 20 sites.")
+    known_ids = {site["site_id"] for site in SITES_DB}
+    unknown_ids = [sid for sid in site_ids if sid not in known_ids]
+    if unknown_ids:
+        raise HTTPException(status_code=404, detail={"unknown_site_ids": unknown_ids})
     steps = []
     for i, sid in enumerate(site_ids):
         site = next((s for s in SITES_DB if s["site_id"] == sid), None)
@@ -204,5 +212,5 @@ async def plan_route(
         total_distance_km=round(len(steps) * 1.2, 1),
         total_time_minutes=len(steps) * 25,
         steps=steps,
-        narrative=f"Your tour visits {len(steps)} remarkable sites spanning multiple Chinese dynasties.",
+        narrative=f"Estimated itinerary for {len(steps)} sites. Distances, walking times, and directions are illustrative and are not live navigation.",
     )
