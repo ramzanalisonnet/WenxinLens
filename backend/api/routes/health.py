@@ -30,7 +30,8 @@ async def readiness_check(request: Request) -> JSONResponse:
         "vector_store": vector_store is not None
                         and (getattr(vector_store, "_client", None) == "milvus"
                              or getattr(vector_store, "_use_faiss", False)),
-        "neo4j": getattr(request.app.state, "neo4j", None) is not None,
+        "neo4j": getattr(request.app.state, "neo4j", None) is not None
+                   and getattr(getattr(request.app.state, "neo4j", None), "_driver", None) is not None,
     }
     ready = all(dependencies.values())
     return JSONResponse(
