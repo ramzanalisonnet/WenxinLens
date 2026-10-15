@@ -218,6 +218,14 @@ vision/vector/graph backends, and is intended only for local API contract checks
 
 ---
 
+## Security and Operations
+
+See [docs/operations.md](docs/operations.md) for production configuration, readiness checks, degraded-mode behavior, and remaining upgrade priorities.
+
+Before exposing this service publicly, review the framework dependency versions in `frontend/package.json`; the current Next.js 14.1.0 pin predates several subsequent security releases and must be upgraded to a patched supported version with its React/UI peer dependencies tested. The new Dependabot and CI workflows help keep dependency updates visible, but they do not automatically prove that a major framework migration is compatible.
+
+---
+
 ## License
 
 MIT License — see [LICENSE](LICENSE) for details.
