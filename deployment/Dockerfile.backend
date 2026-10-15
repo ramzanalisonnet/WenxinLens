@@ -25,7 +25,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 COPY backend/ ./
 
 # Non-root user
-RUN useradd -m -u 1001 appuser && chown -R appuser:appuser /app
+RUN mkdir -p /app/logs && useradd -m -u 1001 appuser && chown -R appuser:appuser /app
 USER appuser
 
 EXPOSE 8000

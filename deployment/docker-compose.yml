@@ -50,8 +50,8 @@ services:
     volumes:
       - milvus_data:/var/lib/milvus
     ports:
-      - "19530:19530"
-      - "9091:9091"
+      - "127.0.0.1:19530:19530"
+      - "127.0.0.1:9091:9091"
     depends_on:
       etcd:
         condition: service_healthy
@@ -73,7 +73,7 @@ services:
     volumes:
       - redis_data:/data
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -95,8 +95,8 @@ services:
       - neo4j_data:/data
       - neo4j_logs:/logs
     ports:
-      - "7474:7474"
-      - "7687:7687"
+      - "127.0.0.1:7474:7474"
+      - "127.0.0.1:7687:7687"
     healthcheck:
       test: ["CMD", "neo4j", "status"]
       interval: 30s
@@ -122,7 +122,7 @@ services:
       TIME_RECONSTRUCTION_CONTROLNET: ${TIME_RECONSTRUCTION_CONTROLNET:-lllyasviel/control_v11p_sd15_canny}
       ADVANCED_FEATURE_CACHE_TTL_SECONDS: ${ADVANCED_FEATURE_CACHE_TTL_SECONDS:-7200}
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     depends_on:
       milvus:
         condition: service_healthy
@@ -145,11 +145,13 @@ services:
     build:
       context: ..
       dockerfile: deployment/Dockerfile.frontend
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
     container_name: wenxinlens-frontend
     environment:
-      NEXT_PUBLIC_API_URL: http://backend:8000
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     depends_on:
       - backend
 

@@ -62,6 +62,8 @@ async def create_session(
     current_user: dict = Depends(get_current_user),
 ) -> dict:
     """Create a new chat session."""
+    if language not in {"en", "zh"}:
+        raise HTTPException(status_code=422, detail="language must be en or zh")
     session_id = str(uuid.uuid4())
     chat_service = ChatService()
     await chat_service.create_session(session_id=session_id, language=language, user=current_user)
@@ -80,6 +82,14 @@ async def send_message(
 
     If `stream=true`, returns a Server-Sent Events stream.
     """
+    chat_service = ChatService()
+    session = await chat_service.get_session(body.session_id)
+    if not session or session.owner_sub != str(current_user.get("sub", "")):
+        # Return 404 for both missing and foreign sessions to avoid leaking IDs.
+        raise HTTPException(status_code=404, detail="Session not found or access denied")
+    if body.language not in {"en", "zh"}:
+        raise HTTPException(status_code=422, detail="language must be en or zh")
+
     from agents.orchestrator import OrchestratorAgent
 
     orchestrator = OrchestratorAgent(
@@ -122,8 +132,8 @@ async def get_session(
     """Retrieve chat history for a session."""
     chat_service = ChatService()
     session = await chat_service.get_session(session_id)
-    if not session:
-        raise HTTPException(status_code=404, detail="Session not found")
+    if not session or session.owner_sub != str(current_user.get("sub", "")):
+        raise HTTPException(status_code=404, detail="Session not found or access denied")
     return SessionResponse(
         session_id=session.session_id,
         created_at=session.created_at,
@@ -140,4 +150,7 @@ async def delete_session(
 ) -> None:
     """Clear a chat session."""
     chat_service = ChatService()
+    session = await chat_service.get_session(session_id)
+    if not session or session.owner_sub != str(current_user.get("sub", "")):
+        raise HTTPException(status_code=404, detail="Session not found or access denied")
     await chat_service.delete_session(session_id)

@@ -137,29 +137,16 @@ class YOLODetector:
     @staticmethod
     def _heuristic_detect(image: Image.Image) -> DetectionResult:
         """
-        Simple color heuristics as fallback when YOLO model is absent.
-        Detects dominant color channels to infer architectural features.
+        Return an explicit no-detection result when trained weights are absent.
+
+        Mean image colours cannot reliably identify architectural structures, so
+        they must not be reported as detected classes or used as confidence.
         """
-        import numpy as np
-
-        img_arr = np.array(image.resize((224, 224)))
-        r_mean = img_arr[:, :, 0].mean()
-        g_mean = img_arr[:, :, 1].mean()
-        b_mean = img_arr[:, :, 2].mean()
-
-        detected = []
-        if r_mean > 120:
-            detected.append("wooden_column")      # Red lacquered wood
-        if b_mean > 100:
-            detected.append("glazed_tile")         # Blue/green glazed tiles
-        if r_mean > b_mean and r_mean > g_mean:
-            detected.append("hip_roof")
-
         return DetectionResult(
-            detected_classes=detected or ["architectural_structure"],
+            detected_classes=[],
             bounding_boxes=[],
-            dominant_class=detected[0] if detected else "architectural_structure",
-            detection_confidence=0.5,
+            dominant_class="unknown",
+            detection_confidence=0.0,
             preprocessed_regions=[],
         )
 

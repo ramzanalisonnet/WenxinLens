@@ -8,7 +8,7 @@ from __future__ import annotations
 import io
 import wave
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
@@ -78,16 +78,12 @@ async def synthesize_speech(
             headers={"Content-Disposition": "attachment; filename=narration.mp3"},
         )
     except Exception as exc:
-        fallback_audio = _generate_silent_wav()
-        return Response(
-            content=fallback_audio,
-            media_type="audio/wav",
-            headers={
-                "Content-Disposition": "attachment; filename=narration-fallback.wav",
-                "X-TTS-Degraded": "true",
-                "X-TTS-Reason": str(exc)[:180],
-            },
-        )
+        # A silent WAV is not a successful narration; provider exception text can
+        # also expose implementation details.
+        raise HTTPException(
+            status_code=503,
+            detail="Speech synthesis is temporarily unavailable.",
+        ) from exc
 
 
 @router.get("/voices", response_model=list[VoiceInfo])

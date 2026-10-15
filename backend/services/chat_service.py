@@ -28,6 +28,7 @@ MAX_HISTORY_MESSAGES = 20
 
 class SessionData(BaseModel):
     session_id: str
+    owner_sub: str | None = None
     language: str = "en"
     created_at: str
     updated_at: str
@@ -70,6 +71,7 @@ class ChatService:
         now = datetime.now(timezone.utc).isoformat()
         session = SessionData(
             session_id=session_id,
+            owner_sub=str(user.get("sub")) if user and user.get("sub") is not None else None,
             language=language,
             created_at=now,
             updated_at=now,

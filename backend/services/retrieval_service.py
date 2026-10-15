@@ -60,22 +60,25 @@ class RetrievalService:
         """
         top_k = top_k or settings.rag_top_k
 
-        # Embed query
+        # Normalize query vectors so Milvus COSINE and the FAISS inner-product
+        # fallback rank candidates consistently. Continue with graph-only context
+        # when model loading or vector retrieval fails.
         import asyncio
         loop = asyncio.get_running_loop()
-        embedder = self._get_embedder()
-        query_vec = await loop.run_in_executor(None, lambda: embedder.encode(query).tolist())
-
-        # Vector search
         vector_results: list[RetrievalResult] = []
         try:
+            embedder = await loop.run_in_executor(None, self._get_embedder)
+            query_vec = await loop.run_in_executor(
+                None,
+                lambda: embedder.encode(query, normalize_embeddings=True).tolist(),
+            )
             vector_results = await self._vector_store.search(
                 query_vector=query_vec,
                 top_k=top_k,
                 filters=filters,
             )
         except Exception as exc:
-            logger.warning(f"Vector search failed: {exc}")
+            logger.warning(f"Vector retrieval unavailable; continuing with graph context if possible: {exc}")
 
         # Graph context enrichment
         graph_context: list[dict] = []

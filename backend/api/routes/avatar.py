@@ -1,14 +1,20 @@
 import json
 from typing import Any
 
-from fastapi import APIRouter, File, HTTPException, Request, UploadFile, WebSocket, WebSocketDisconnect
+import hmac
+
+from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
 from agents.orchestrator import OrchestratorAgent
 from services.avatar_service import AvatarService
+from config import get_settings
+from middleware.auth import decode_access_token, get_current_user
+from middleware.rate_limiter import limiter
 
 router = APIRouter()
+settings = get_settings()
 _avatar_service = AvatarService()
 
 
@@ -59,7 +65,8 @@ def _get_orchestrator(request: Request) -> OrchestratorAgent:
 
 
 @router.post("/chat", response_model=AvatarChatResponse)
-async def avatar_chat(body: AvatarChatRequest, request: Request) -> dict[str, Any]:
+@limiter.limit("20/minute")
+async def avatar_chat(body: AvatarChatRequest, request: Request, current_user: dict = Depends(get_current_user)) -> dict[str, Any]:
     try:
         orchestrator = _get_orchestrator(request)
         return await _avatar_service.build_chat_response(
@@ -91,7 +98,8 @@ async def avatar_chat(body: AvatarChatRequest, request: Request) -> dict[str, An
 
 
 @router.post("/tts")
-async def avatar_tts(body: AvatarTTSRequest) -> Response:
+@limiter.limit("10/minute")
+async def avatar_tts(request: Request, body: AvatarTTSRequest, current_user: dict = Depends(get_current_user)) -> Response:
     try:
         audio_bytes, media_type = await _avatar_service.synthesize_character_speech(
             text=body.text,
@@ -100,40 +108,64 @@ async def avatar_tts(body: AvatarTTSRequest) -> Response:
         )
         return Response(content=audio_bytes, media_type=media_type)
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Avatar TTS failed: {exc}") from exc
+        raise HTTPException(status_code=503, detail="Speech synthesis is temporarily unavailable.") from exc
 
 
 @router.post("/stt")
+@limiter.limit("10/minute")
 async def avatar_stt(
+    request: Request,
     audio: UploadFile = File(...),
     language: str | None = None,
+    current_user: dict = Depends(get_current_user),
 ) -> dict[str, str]:
     try:
         payload = await audio.read()
         text = await _avatar_service.transcribe_audio(payload, language=language)
         return {"text": text}
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Avatar STT failed: {exc}") from exc
+        raise HTTPException(status_code=503, detail="Speech transcription is temporarily unavailable.") from exc
 
 
 @router.post("/lipsync", response_model=AvatarLipSyncResponse)
-async def avatar_lipsync(body: AvatarLipSyncRequest) -> dict[str, Any]:
+@limiter.limit("30/minute")
+async def avatar_lipsync(request: Request, body: AvatarLipSyncRequest, current_user: dict = Depends(get_current_user)) -> dict[str, Any]:
     try:
         return _avatar_service.build_lipsync_timeline(
             text=body.text,
             duration_ms=body.duration_ms,
         )
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Avatar lip sync failed: {exc}") from exc
+        raise HTTPException(status_code=500, detail="Avatar lip-sync generation failed.") from exc
 
 
 @router.websocket("/ws")
 async def avatar_ws(websocket: WebSocket) -> None:
+    # WebSocket routes do not execute FastAPI Depends; check credentials explicitly.
+    authorization = websocket.headers.get("authorization", "")
+    api_key = websocket.headers.get("x-api-key", "")
+    allowed = False
+    if api_key and settings.master_api_key and hmac.compare_digest(api_key, settings.master_api_key):
+        allowed = True
+    elif authorization.lower().startswith("bearer "):
+        try:
+            decode_access_token(authorization.split(" ", 1)[1].strip())
+            allowed = True
+        except Exception:
+            allowed = False
+    elif not settings.is_production:
+        allowed = True
+    if not allowed:
+        await websocket.close(code=1008, reason="Authentication required")
+        return
     await websocket.accept()
     try:
         await websocket.send_json({"type": "connected", "payload": {"message": "avatar websocket ready"}})
         while True:
             raw = await websocket.receive_text()
+            if len(raw) > 16_384:
+                await websocket.send_json({"type": "error", "payload": {"detail": "message too large"}})
+                continue
             try:
                 data = json.loads(raw)
             except json.JSONDecodeError:

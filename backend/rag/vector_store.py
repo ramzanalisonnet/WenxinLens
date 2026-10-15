@@ -65,6 +65,9 @@ class VectorStore:
             from pymilvus import utility
             if not utility.has_collection(COLLECTION_NAME):
                 self._create_collection()
+            else:
+                from pymilvus import Collection
+                Collection(COLLECTION_NAME).load()
             self._client = "milvus"
             logger.info(f"Connected to Milvus at {settings.milvus_host}:{settings.milvus_port}")
         except Exception as exc:
@@ -127,6 +130,8 @@ class VectorStore:
         embeddings = await loop.run_in_executor(None, lambda: self._embed_texts(texts))
 
         for doc, emb in zip(documents, embeddings):
+            if len(emb) != EMBEDDING_DIM:
+                raise ValueError(f"Document embedding dimension {len(emb)} != configured {EMBEDDING_DIM}")
             doc.embedding = emb
             if not doc.doc_id:
                 doc.doc_id = str(uuid.uuid4())
@@ -175,8 +180,10 @@ class VectorStore:
     def _search_sync(
         self, query_vector: list[float], top_k: int, filters: dict | None
     ) -> list:
+        if top_k <= 0:
+            return []
         if self._use_faiss:
-            return self._faiss_search(query_vector, top_k)
+            return self._faiss_search(query_vector, top_k, filters)
         elif self._client == "milvus":
             return self._milvus_search(query_vector, top_k, filters)
         return []
@@ -189,11 +196,16 @@ class VectorStore:
         from services.retrieval_service import RetrievalResult
 
         collection = Collection(COLLECTION_NAME)
-        collection.load()
-
         expr = None
         if filters:
-            clauses = [f'{k} == "{v}"' for k, v in filters.items() if v]
+            # Only allow known metadata columns and escape expression literals.
+            allowed_fields = {"building", "dynasty", "language"}
+            clauses = []
+            for key, value in filters.items():
+                if key not in allowed_fields or value is None or value == "":
+                    continue
+                safe_value = str(value).replace("\\", "\\\\").replace('"', '\\"')
+                clauses.append(f'{key} == "{safe_value}"')
             if clauses:
                 expr = " and ".join(clauses)
 
@@ -218,25 +230,49 @@ class VectorStore:
             for hit in results[0]  # type: ignore[index]
         ]
 
-    def _faiss_search(self, query_vector: list[float], top_k: int) -> list:
+    def _faiss_search(self, query_vector: list[float], top_k: int, filters: dict | None = None) -> list:
         import numpy as np
         from services.retrieval_service import RetrievalResult
 
-        if not self._faiss_docs:
+        if not self._faiss_docs or top_k <= 0:
             return []
-        q = np.array([query_vector], dtype="float32")
-        distances, indices = self._faiss_index.search(q, min(top_k, len(self._faiss_docs)))  # type: ignore[union-attr]
+        q = np.asarray(query_vector, dtype="float32").reshape(1, -1)
+        if q.shape[1] != EMBEDDING_DIM:
+            raise ValueError(f"Query embedding dimension {q.shape[1]} != configured {EMBEDDING_DIM}")
+
+        allowed_fields = {"building", "dynasty", "language"}
+        requested_filters = {
+            key: str(value)
+            for key, value in (filters or {}).items()
+            if key in allowed_fields and value is not None and value != ""
+        }
+        candidate_ids = [
+            i for i, doc in enumerate(self._faiss_docs)
+            if all(str(getattr(doc, key)) == value for key, value in requested_filters.items())
+        ]
+        if not candidate_ids:
+            return []
+
+        # Score only eligible documents so the fallback honours metadata filters.
+        candidate_vectors = np.asarray(
+            [self._faiss_docs[i].embedding for i in candidate_ids], dtype="float32"
+        )
+        q = q / np.maximum(np.linalg.norm(q, axis=1, keepdims=True), 1e-12)
+        candidate_vectors = candidate_vectors / np.maximum(
+            np.linalg.norm(candidate_vectors, axis=1, keepdims=True), 1e-12
+        )
+        scores = (candidate_vectors @ q.T).reshape(-1)
+        ranked = np.argsort(scores)[::-1][:min(top_k, len(candidate_ids))]
+
         results = []
-        for dist, idx in zip(distances[0], indices[0]):
-            if idx < 0 or idx >= len(self._faiss_docs):
-                continue
-            doc = self._faiss_docs[idx]
+        for rank in ranked:
+            doc = self._faiss_docs[candidate_ids[int(rank)]]
             results.append(
                 RetrievalResult(
                     text=doc.text,
                     source=doc.source,
-                    score=float(dist),
-                    metadata={"building": doc.building, "dynasty": doc.dynasty},
+                    score=float(scores[int(rank)]),
+                    metadata={"building": doc.building, "dynasty": doc.dynasty, "language": doc.language},
                 )
             )
         return results
