@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+import asyncio
+
 import pytest
 from pydantic import ValidationError
 
 from config import Settings
 from services.vision_service import VisionService
+from services.chat_service import ChatService
+from services import chat_service as chat_service_module
 
 
 def test_production_rejects_development_secret_defaults() -> None:
@@ -46,3 +50,21 @@ def test_mock_vision_prediction_never_claims_a_building_identity() -> None:
     assert prediction.building_name.startswith("Unknown architecture")
     assert prediction.confidence_score == 0.0
     assert prediction.top_k == []
+
+
+
+def test_async_redis_factory_is_not_awaited(monkeypatch: pytest.MonkeyPatch) -> None:
+    class FakeRedis:
+        async def ping(self) -> bool:
+            return True
+
+    fake_redis = FakeRedis()
+    monkeypatch.setattr(chat_service_module.aioredis, "from_url", lambda *args, **kwargs: fake_redis)
+    service = ChatService()
+
+    async def scenario() -> None:
+        client = await service._get_redis()
+        assert client is fake_redis
+        assert service._use_memory_only is False
+
+    asyncio.run(scenario())
