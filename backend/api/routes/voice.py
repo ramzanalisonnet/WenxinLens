@@ -5,15 +5,13 @@ GET  /api/v1/voice/voices     — list available voices
 """
 from __future__ import annotations
 
-import io
-import wave
-
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
 from config import get_settings
 from middleware.auth import get_current_user
+from middleware.rate_limiter import limiter
 from services.tts_service import TTSService
 
 settings = get_settings()
@@ -27,18 +25,6 @@ def _get_tts() -> TTSService:
     if _tts_service is None:
         _tts_service = TTSService()
     return _tts_service
-
-
-def _generate_silent_wav(duration_seconds: float = 0.8, sample_rate: int = 16000) -> bytes:
-    """Generate a short silent WAV payload for degraded-mode fallback."""
-    frames = int(duration_seconds * sample_rate)
-    with io.BytesIO() as buf:
-        with wave.open(buf, "wb") as wav:
-            wav.setnchannels(1)
-            wav.setsampwidth(2)
-            wav.setframerate(sample_rate)
-            wav.writeframes(b"\x00\x00" * frames)
-        return buf.getvalue()
 
 
 class SynthesizeRequest(BaseModel):
@@ -58,7 +44,9 @@ class VoiceInfo(BaseModel):
 
 
 @router.post("/synthesize")
+@limiter.limit("10/minute")
 async def synthesize_speech(
+    request: Request,
     body: SynthesizeRequest,
     current_user: dict = Depends(get_current_user),
 ) -> Response:
