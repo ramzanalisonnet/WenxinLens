@@ -119,8 +119,15 @@ async def avatar_stt(
     language: str | None = None,
     current_user: dict = Depends(get_current_user),
 ) -> dict[str, str]:
+    max_bytes = settings.max_image_size_mb * 1024 * 1024
+    if audio.size is not None and audio.size > max_bytes:
+        raise HTTPException(status_code=413, detail="Audio upload exceeds the configured size limit.")
     try:
-        payload = await audio.read()
+        payload = await audio.read(max_bytes + 1)
+        if not payload:
+            raise HTTPException(status_code=400, detail="Empty audio upload.")
+        if len(payload) > max_bytes:
+            raise HTTPException(status_code=413, detail="Audio upload exceeds the configured size limit.")
         text = await _avatar_service.transcribe_audio(payload, language=language)
         return {"text": text}
     except Exception as exc:
